@@ -1,9 +1,10 @@
 class Astronaught{
-    constructor(x,y,radius){  
+    constructor(x,y,width,height){  
       var options={
+        restitution:0.5,
+        friction:0.5,
+        density:1.2
       }
-      this.x = x;
-      this.y = y;
       this.width = width;
       this.height = height;
       this.image = loadImage("images/Astronaught.png");
@@ -16,9 +17,8 @@ class Astronaught{
       translate(astpos.x,astpos.y);
       rectMode(CENTER);
       fill("WHITE");
-      rectangle(x,y,width,height);
-      pop();
       imageMode(CENTER);
-      image(this.image,this.body);
+      image(this.image,0,0,this.width,this.height);
+      pop()
     }
   }
