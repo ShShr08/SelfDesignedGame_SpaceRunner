@@ -11,6 +11,7 @@ var ahB
 var gameState = 0
 var lP
 var foodStock
+var startButton
 
 const Engine = Matter.Engine;
 const World = Matter.World;
@@ -38,7 +39,8 @@ function setup(){
 
     ast = new Astronaught(300,612,300,300);
     astpos = ast.body.position;
-    ahB = createSpri
+    //ahB = createSpri
+    
 
     lG = new Group;
 }
@@ -49,6 +51,7 @@ function draw(){
         /*
         text("Food Supply = "+foodStock,1000,100);
         */
+        sB();
     }
 
     if(gameState === 1){
@@ -85,5 +88,12 @@ function spawnEnemy(){
         Lazer.velocityX = -10;
         lG.add(Lazer);
         
+    }
+}
+
+function sB(){
+    startButton = createSprite(screen.width/2,screen.height/2,25,25);
+    if(mouseClicked(startButton)){
+        gameState = 1
     }
 }
