@@ -5,6 +5,7 @@ var ground
 var astpos
 var gImg
 var lG
+var asthitbox
 
 const Engine = Matter.Engine;
 const World = Matter.World;
@@ -26,6 +27,8 @@ function setup(){
 
     ast = new Astronaught(300,612,300,300);
     astpos = ast.body.position;
+    asthitbox = createSprite(300,612,300,300);
+    ast.visible = false;
 
     lG = new Group;
 
@@ -47,7 +50,7 @@ function draw(){
         astpos.y = 612
     }
 
-    if(lG.isTouching(ast)){
+    if(lG.isTouching(asthitbox)){
         lG.destroyEach();
         text("GAME OVER",500,500)
     }
