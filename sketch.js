@@ -1,11 +1,16 @@
-var spImg
+var bgG0
+var bgG1
+var bgG2
 var ast
 var myEngine
 var ground
 var astpos
 var gImg
 var lG
-var asthitbox
+var ahB
+var gameState = 0
+var lP
+var foodStock
 
 const Engine = Matter.Engine;
 const World = Matter.World;
@@ -13,50 +18,64 @@ const Bodies = Matter.Bodies;
 const Body = Matter.Body;
 
 function preload(){
-    spImg = loadImage("images/Space.png");
+    bgG0 = loadImage("images/Blue wall 2.png");
+    bgG1 = loadImage("images/Space.png");
     gImg = loadImage("images/e.png")
 }
 
 function setup(){
+    database=firebase.database();
     createCanvas(1536,753);
     myEngine = Engine.create();
     world = myEngine.world
-
+    /*
+    fS=database.ref('FasS');
+    fS.on("value",fS);
+    foodStock = data.val()
+    */
     ground = createSprite(768,740,1536,50);
     ground.addImage(gImg);
 
     ast = new Astronaught(300,612,300,300);
     astpos = ast.body.position;
-    asthitbox = createSprite(300,612,300,300);
-    ast.visible = false;
+    ahB = createSpri
 
     lG = new Group;
-
-
 }
 
 function draw(){
-    background(spImg);
-
-    if(keyDown(UP_ARROW)){
-        astpos.y = astpos.y -10
-    } 
-    if(keyDown(DOWN_ARROW)){
-        astpos.y = astpos.y +2.5
+    if(gameState === 0){
+        background(bgG0);
+        /*
+        text("Food Supply = "+foodStock,1000,100);
+        */
     }
-    astpos.y = astpos.y+3
+
+    if(gameState === 1){
+        background(bgG1);
+        if(keyDown(UP_ARROW)){
+            astpos.y = astpos.y -10
+        } 
+        if(keyDown(DOWN_ARROW)){
+            astpos.y = astpos.y +2.5
+        }
+        astpos.y = astpos.y+3
     
-    if(astpos.y>612){
-        astpos.y = 612
+        if(astpos.y>612){
+            astpos.y = 612
+        }
+        if(lG.isTouching(ahB)){
+        lG.destroyEach();
+        gamestate = 2
+        }
+        spawnEnemy();
     }
 
-    if(lG.isTouching(asthitbox)){
-        lG.destroyEach();
-        text("GAME OVER",500,500)
+    else if(gameState === 2){
+        text("GAME OVER",500,500);
     }
 
     drawSprites();
-    spawnEnemy();
     ast.display();
 }
 
