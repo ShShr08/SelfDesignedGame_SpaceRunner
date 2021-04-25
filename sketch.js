@@ -39,7 +39,8 @@ function setup(){
 
     ast = new Astronaught(300,612,300,300);
     astpos = ast.body.position;
-    //ahB = createSpri
+    ahB = createSprite(300,612,150,150)
+    ahB.visible = false
     
 
     lG = new Group;
@@ -48,6 +49,9 @@ function setup(){
 function draw(){
     if(gameState === 0){
         background(bgG0);
+        ahB.collide(ground);
+        ahB.x = astpos.x;
+        ahB.y = astpos.y;
         /*
         text("Food Supply = "+foodStock,1000,100);
         */
@@ -93,7 +97,7 @@ function spawnEnemy(){
 
 function sB(){
     startButton = createSprite(screen.width/2,screen.height/2,25,25);
-    if(mouseClicked(startButton)){
+    if(mousePressedOver(startButton)){
         gameState = 1
     }
 }
