@@ -38,7 +38,6 @@ function preload(){
 }
 
 function setup(){
-    database=firebase.database();
     createCanvas(1536,722);
     myEngine = Engine.create();
     world = myEngine.world
