@@ -19,6 +19,9 @@ var fm,fl,fmI,flI;
 var rSt;
 var rStVal=1;
 var score = 0;
+var randX,randY;
+var foodGroup;
+var waterGroup;
 
 
 const Engine = Matter.Engine;
@@ -110,6 +113,8 @@ function setup(){
     rSt = createSprite(30,480,25,25);
 
     lG = new Group;
+    foodGroup = new Group;
+    foodGroup = new Group;
 }
 
 function draw(){
@@ -277,6 +282,7 @@ function draw(){
         fm.visible = false
         fl.visible = false
         rc.visible = false
+        getSupplies();
         spawnEnemy();
     }
 
@@ -335,6 +341,8 @@ function draw(){
     if(frameCount%1000 === 0){
         waterStock = waterStock-1;
     }
+    randX = Math.round(random(1,3));
+    randY = Math.round(random(1,3))
     drawSprites();
     ast.display();
     //console.log(hour());
@@ -346,7 +354,6 @@ function spawnEnemy(){
         Lazer.shapeColor = "red";
         Lazer.velocityX = -13;
         lG.add(Lazer);
-        
     }
 }
 
@@ -365,20 +372,60 @@ function sB(){
 }
 
 function getSupplies(){
-    if(frameCount%400 === 0){
-        fotw = createSprite(25,25,Math.round(random(100,1400)),Math.round(random(50,677)));
+    if(score%400 === 0){
+        fotw = createSprite(Math.round(random(100,1400)),Math.round(random(50,677)),20,20);
         fotw.shapeColor = "orange";
-        fotw.lifeTime(7);
-        if(mousePressedOver(fotw)){
+        foodGroup.add(fotw)
+        fotw.lifeTime = 75;
+        if(randX === 1){
+            fotw.velocityX = -20;
+        }
+        else if(randX === 2){
+            fotw.veloctyX = 20;
+        }
+        else if(randX === 3){
+            fotw.velocityX = 0;
+        }
+        if(randY === 1){
+            fotw.velocityY = -20;
+        }
+        else if(randY === 2){
+            fotw.velocityY = 20;
+        }
+        else if(randY === 3){
+            fotw.velocityY = 0;
+        }
+        if(mousePressedOver(foodGroup)){
             foodStock = foodStock+1;
+            foodGroup.destroyEach;
         }
     }
-    if(frameCount%900 === 0){
-        wotw = createSp(10,10,Math.round(random(100,1400)),Math.round(random(50,677)));
+    if(score%900 === 0){
+        wotw = createSprite(Math.round(random(100,1400)),Math.round(random(50,677)),10,10);
         wotw.shapeColor = "blue";
-        wotw.lifeTime(5);
-        if(mousePressedOver(wotw)){
+        waterGroup.add(wotw)
+        wotw.lifeTime = 100;
+        if(randX === 1){
+            wotw.velocityX = -20;
+        }
+        else if(randX === 2){
+            wotw.veloctyX = 20;
+        }
+        else if(randX === 3){
+            wotw.velocityX = 0;
+        }
+        if(randY === 1){
+            wotw.velocityY = -20;
+        }
+        else if(randY === 2){
+            wotw.velocityY = 20;
+        }
+        else if(randY === 3){
+            wotw.velocityY = 0;
+        }
+        if(mousePressedOver(waterGroup)){
             waterStock = waterStock+1;
+            waterGroup.destroyEach;
         }
     }
 }
