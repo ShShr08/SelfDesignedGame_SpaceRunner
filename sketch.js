@@ -49,6 +49,7 @@ function preload(){
     flI = loadImage("images/CannedFood2.png");
 }
 
+
 function setup(){
     database=firebase.database();
     createCanvas(1536,722);
@@ -117,18 +118,15 @@ function setup(){
     lG = new Group();
     foodGroup = new Group();
     waterGroup = new Group();
+    
 }
 
 function draw(){
     if(gameState === 0){
         background(bgG0);
-        ahB.collide(ground);
         fill("white");
-        /*
         text("Click here to start playing",700,320);
-        textSize(20);
-        text("Text is currently down due to immense lag, please wait while im fixing it",900,500);
-        */
+        ahB.collide(ground);
         if(mousePressedOver(rSt) && rStVal === 1){
             foodStock+5;
             waterStock+5;
@@ -136,7 +134,6 @@ function draw(){
         }
         rSt.visible = false
         restartButton.visible = false
-        /*
         if(foodStock >8 || foodStock ===8){
             fill("darkgreen");
             text("Food supply = "+foodStock,1125,500);
@@ -157,7 +154,6 @@ function draw(){
             fill("red");
             text("Food supply = "+foodStock,1125,500);
         }
-        */
         if(foodStock >5){
             fm.visible = true
             fl.visible = false
@@ -170,7 +166,6 @@ function draw(){
             fm.visible = false
             fl.visible = false
         }
-        /*
         if(waterStock === 5){
             fill("darkgreen");
             text("Water supply = "+waterStock,1325,500);
@@ -195,7 +190,6 @@ function draw(){
             fill("red");
             text("Water supply = "+waterStock,1325,500);
         }
-        */
         if(waterStock === 5){
             w5.visible = true
             w4.visible = false
@@ -287,14 +281,18 @@ function draw(){
         fm.visible = false
         fl.visible = false
         rc.visible = false
-
-        if(mousePressedOver(waterGroup)){
-            waterStock = waterStock+1;
-            waterGroup.destroyEach();
+        
+        for(i=0;i<waterGroup.length;i++){
+            if(mousePressedOver(waterGroup[i])){
+                waterStock = waterStock+1;
+                waterGroup[i].destroy();
+            }
         }
-        if(mousePressedOver(foodGroup)){
-            foodStock = foodStock+1;
-            foodGroup.destroyEach();
+        for(i=0;i<foodGroup.length;i++){
+            if(mousePressedOver(waterGroup[i])){
+                foodStock = foodStock+1;
+                foodGroup[i].destroy();
+            }
         }
 
         getSupplies();
@@ -358,10 +356,10 @@ function draw(){
     if(ahB6.y>573){
         ahB6.y = 573;
     }
-    if(frameCount%500 === 0){
+    if(frameCount%400 === 0 && foodStock>0){
         foodStock = foodStock-1;
     }
-    if(frameCount%1000 === 0){
+    if(frameCount%500 === 0 && waterStock>0){
         waterStock = waterStock-1;
     }
     randX = Math.round(random(1,3));
@@ -381,15 +379,18 @@ function spawnEnemy(){
 }
 
 function sB(){
-    if(foodStock >=2 && waterStock>=1){
+    if(foodStock >=2 && waterStock>=1){ 
         if(mousePressedOver(startButton)){
             gameState = 1
         }
         if(gameState === 1 || gameState === 2){
              startButton.visible = false
         }
+        if(gameState === 0){
+            startButton.visible = true
+        }
     }
-    else if(mousePressedOver(startButton) && foodStock<=1 && waterStock === 0){
+    if(mousePressedOver(startButton) && foodStock<=1 && waterStock === 0){
         text("Sorry but your food and water stock is very low, too bad you're gonna have to restart the page",300,500)
     }
 }
@@ -424,19 +425,19 @@ function getSupplies(){
         wotw.shapeColor = "blue";
         wotw.lifetime = 100;
         if(randX === 1){
-            wotw.velocityX = -20;
+            wotw.velocityX = -15;
         }
         else if(randX === 2){
-            wotw.veloctyX = 20;
+            wotw.veloctyX = 15;
         }
         else if(randX === 3){
             wotw.velocityX = 0;
         }
         if(randY === 1){
-            wotw.velocityY = -20;
+            wotw.velocityY = -15;
         }
         else if(randY === 2){
-            wotw.velocityY = 20;
+            wotw.velocityY = 15;
         }
         else if(randY === 3){
             wotw.velocityY = 0;
