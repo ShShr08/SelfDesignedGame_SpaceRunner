@@ -22,6 +22,7 @@ var score = 0;
 var randX,randY;
 var foodGroup;
 var waterGroup;
+var restartButton;
 
 
 const Engine = Matter.Engine;
@@ -110,12 +111,11 @@ function setup(){
     fl.scale = 1
     
     startButton = createSprite(768,361,45,45);
+    restartButton = createSprite(768,361,50,50);
     rSt = createSprite(30,480,25,25);
 
-    // the syntax for creating group is var a = new Group();
     lG = new Group();
     foodGroup = new Group();
-    // and foodGroup was initialised twice changing it to waterGroup
     waterGroup = new Group();
 }
 
@@ -135,6 +135,7 @@ function draw(){
             rStVal-1
         }
         rSt.visible = false
+        restartButton.visible = false
         /*
         if(foodStock >8 || foodStock ===8){
             fill("darkgreen");
@@ -244,7 +245,9 @@ function draw(){
 
     if(gameState === 1){
         background(bgG1);
+        fill("white");
         text("Score : "+score,1300,100);
+        restartButton.visible = false
         score = score+1;
         if(keyDown(UP_ARROW)){
             astpos.y = astpos.y -10;
@@ -284,6 +287,16 @@ function draw(){
         fm.visible = false
         fl.visible = false
         rc.visible = false
+
+        if(mousePressedOver(waterGroup)){
+            waterStock = waterStock+1;
+            waterGroup.destroyEach();
+        }
+        if(mousePressedOver(foodGroup)){
+            foodStock = foodStock+1;
+            foodGroup.destroyEach();
+        }
+
         getSupplies();
         spawnEnemy();
     }
@@ -291,12 +304,16 @@ function draw(){
 
 
     else if(gameState === 2){
-        text("GAME OVER",500,500);
-        rc.visible = false;
-        // setting velocity of each group object to 0
+        rc.visible = false
+        restartButton.visible = true;
         lG.setVelocityXEach(0);
-        foodGroup.setVelocityXEach(0);
-        waterGroup.setVelocityXEach(0);
+        foodGroup.destroyEach();
+        waterGroup.destroyEach();
+        if(mousePressedOver(restartButton)){
+            gameState = 0;
+            score = 0;
+        }
+        dT();
     }
 
     if(astpos.y>575){
@@ -372,8 +389,7 @@ function sB(){
              startButton.visible = false
         }
     }
-    // brackets are incorrectly placed in the below - rectified
-     if(mousePressedOver(startButton) && foodStock<=1 && waterStock === 0){
+    else if(mousePressedOver(startButton) && foodStock<=1 && waterStock === 0){
         text("Sorry but your food and water stock is very low, too bad you're gonna have to restart the page",300,500)
     }
 }
@@ -382,8 +398,6 @@ function getSupplies(){
     if(score%400 === 0){
         fotw = createSprite(Math.round(random(100,1400)),Math.round(random(50,677)),20,20);
         fotw.shapeColor = "orange";
-        
-        // shan i was in a hurry & by mistake i texted as lifeTime instead of lifetime
         fotw.lifetime = 75;
         if(randX === 1){
             fotw.velocityX = -20;
@@ -403,21 +417,11 @@ function getSupplies(){
         else if(randY === 3){
             fotw.velocityY = 0;
         }
-        // it's always advised to add the sprite to the group after defining it's property/functionality
-        foodGroup.add(fotw);
-        // and the below condition should be done in function draw during gameState = 1-------will do this in class today.
-        if(mousePressedOver(foodGroup)){
-            foodStock = foodStock+1;
-             //destroyEach() is a function.
-            foodGroup.destroyEach();
-        }
-        
+        foodGroup.add(fotw)
     }
     if(score%900 === 0){
         wotw = createSprite(Math.round(random(100,1400)),Math.round(random(50,677)),10,10);
         wotw.shapeColor = "blue";
-       
-        // shan i was in a hurry & by mistake i texted as lifeTime instead of lifetime
         wotw.lifetime = 100;
         if(randX === 1){
             wotw.velocityX = -20;
@@ -437,14 +441,23 @@ function getSupplies(){
         else if(randY === 3){
             wotw.velocityY = 0;
         }
-        // it's always advised to add the sprite to the group after defining it's property/functionality
-         waterGroup.add(wotw)
-        // and the below condition should be done in function draw during gameState = 1-------will do this in class today.
-        if(mousePressedOver(waterGroup)){
-            waterStock = waterStock+1;
-            //destroyEach() is a function.
-            waterGroup.destroyEach();
-        }
-        
+        waterGroup.add(wotw)
+    }
+}
+
+function dT(){
+    rDT = Math.random(round(1,4));
+    textSize(15);
+    if(rDT === 1){
+        text("well you could have done much better",740,350);
+    }
+    if(rDT === 2){
+        text("Nice start, you're doing better",745,350);
+    }
+    if(rDT === 3){
+        text("Try to not make that misate again",739,350);
+    }
+    if(rDT === 4){
+        text("Predict your and the lazer's movements",740,350)
     }
 }
