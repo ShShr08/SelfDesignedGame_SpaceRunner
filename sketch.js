@@ -66,7 +66,7 @@ function setup(){
     rc = createSprite(35,480,5,500);
     rc.addImage(rI);
 
-    ahbG = new Group;
+    ahbG = new Group();
     ahB = createSprite(365,483,1,75);
     ahB2 = createSprite(395,545,1,65);
     ahB3 = createSprite(368,631,1,140);
@@ -112,9 +112,11 @@ function setup(){
     startButton = createSprite(768,361,45,45);
     rSt = createSprite(30,480,25,25);
 
-    lG = new Group;
-    foodGroup = new Group;
-    foodGroup = new Group;
+    // the syntax for creating group is var a = new Group();
+    lG = new Group();
+    foodGroup = new Group();
+    // and foodGroup was initialised twice changing it to waterGroup
+    waterGroup = new Group();
 }
 
 function draw(){
@@ -290,7 +292,11 @@ function draw(){
 
     else if(gameState === 2){
         text("GAME OVER",500,500);
-        rc.visible = false
+        rc.visible = false;
+        // setting velocity of each group object to 0
+        lG.setVelocityXEach(0);
+        foodGroup.setVelocityXEach(0);
+        waterGroup.setVelocityXEach(0);
     }
 
     if(astpos.y>575){
@@ -366,7 +372,8 @@ function sB(){
              startButton.visible = false
         }
     }
-    else if(mousePressedOver(startButton && foodStock<=1 && waterStock === 0)){
+    // brackets are incorrectly placed in the below - rectified
+     if(mousePressedOver(startButton) && foodStock<=1 && waterStock === 0){
         text("Sorry but your food and water stock is very low, too bad you're gonna have to restart the page",300,500)
     }
 }
@@ -375,8 +382,9 @@ function getSupplies(){
     if(score%400 === 0){
         fotw = createSprite(Math.round(random(100,1400)),Math.round(random(50,677)),20,20);
         fotw.shapeColor = "orange";
-        foodGroup.add(fotw)
-        fotw.lifeTime = 75;
+        
+        // shan i was in a hurry & by mistake i texted as lifeTime instead of lifetime
+        fotw.lifetime = 75;
         if(randX === 1){
             fotw.velocityX = -20;
         }
@@ -395,16 +403,22 @@ function getSupplies(){
         else if(randY === 3){
             fotw.velocityY = 0;
         }
+        // it's always advised to add the sprite to the group after defining it's property/functionality
+        foodGroup.add(fotw);
+        // and the below condition should be done in function draw during gameState = 1-------will do this in class today.
         if(mousePressedOver(foodGroup)){
             foodStock = foodStock+1;
-            foodGroup.destroyEach;
+             //destroyEach() is a function.
+            foodGroup.destroyEach();
         }
+        
     }
     if(score%900 === 0){
         wotw = createSprite(Math.round(random(100,1400)),Math.round(random(50,677)),10,10);
         wotw.shapeColor = "blue";
-        waterGroup.add(wotw)
-        wotw.lifeTime = 100;
+       
+        // shan i was in a hurry & by mistake i texted as lifeTime instead of lifetime
+        wotw.lifetime = 100;
         if(randX === 1){
             wotw.velocityX = -20;
         }
@@ -423,9 +437,14 @@ function getSupplies(){
         else if(randY === 3){
             wotw.velocityY = 0;
         }
+        // it's always advised to add the sprite to the group after defining it's property/functionality
+         waterGroup.add(wotw)
+        // and the below condition should be done in function draw during gameState = 1-------will do this in class today.
         if(mousePressedOver(waterGroup)){
             waterStock = waterStock+1;
-            waterGroup.destroyEach;
+            //destroyEach() is a function.
+            waterGroup.destroyEach();
         }
+        
     }
 }
