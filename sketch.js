@@ -17,7 +17,6 @@ var rI;
 var w1,w2,w3,w4,w5,wI1,wI2,wI3,wI4,wI5;
 var fm,fl,fmI,flI;
 var rSt;
-var rStVal=1;
 var score = 0;
 var randX,randY;
 var foodGroup;
@@ -113,12 +112,11 @@ function setup(){
     
     startButton = createSprite(768,361,45,45);
     restartButton = createSprite(768,361,50,50);
-    rSt = createSprite(30,480,25,25);
+    rSt = createSprite(1525,10,25,25);
 
     lG = new Group();
     foodGroup = new Group();
     waterGroup = new Group();
-    
 }
 
 function draw(){
@@ -127,19 +125,14 @@ function draw(){
         fill("white");
         text("Click here to start playing",700,320);
         ahB.collide(ground);
-        if(mousePressedOver(rSt) && rStVal === 1){
-            foodStock+5;
-            waterStock+5;
-            rStVal-1
-        }
-        rSt.visible = false
+        rSt.visible = true
         restartButton.visible = false
         if(foodStock >8 || foodStock ===8){
             fill("darkgreen");
             text("Food supply = "+foodStock,1125,500);
         }
         if(foodStock >6 && foodStock<8 || foodStock === 6){
-            fill("lightgreen");
+            fill("green");
             text("Food supply = "+foodStock,1125,500);
         }
         if(foodStock >4 && foodStock<6 || foodStock === 4){
@@ -171,7 +164,7 @@ function draw(){
             text("Water supply = "+waterStock,1325,500);
         }
         if(waterStock === 4){
-            fill("lightgreen");
+            fill("green");
             text("Water supply = "+waterStock,1325,500);
         }
         if(waterStock === 3){
@@ -240,7 +233,66 @@ function draw(){
     if(gameState === 1){
         background(bgG1);
         fill("white");
-        text("Score : "+score,1300,100);
+        textSize(13);
+        text("Score : "+score,1387,30);
+        text("Food Remaining =",1387,60);
+
+        if(foodStock >8 || foodStock ===8){
+            stroke("lightgreen");
+            fill("darkgreen");
+            text(" "+foodStock,1500,60);
+        }
+        if(foodStock >6 && foodStock<8 || foodStock === 6){
+            stroke("lightgreen");
+            fill("green");
+            text(" "+foodStock,1500,60);
+        }
+        if(foodStock >4 && foodStock<6 || foodStock === 4){
+            stroke("lightyellow");
+            fill("yellow");
+            text(" "+foodStock,1500,60);
+        }
+        if(foodStock >2 && foodStock<4 || foodStock === 2){
+            stroke("lightorange")
+            fill("orange");
+            text(" "+foodStock,1500,60);
+        }
+        if(foodStock <2 || foodStock === 0){
+            stroke("lightred")
+            fill("red");
+            text(" "+foodStock,1500,60);
+        }
+
+        stroke("white");
+        fill("white");
+        text("Water Remaining =",1388,90);  
+
+        if(waterStock === 5){
+            stroke("lightgreen");
+            fill("darkgreen");
+            text(" "+waterStock,1500,90);
+        }
+        if(waterStock === 4){
+            stroke("lightgreen");
+            fill("green");
+            text(" "+waterStock,1500,90);
+        }
+        if(waterStock === 3){
+            stroke("lightyellow");
+            fill("yellow");
+            text(" "+waterStock,1500,90);
+        }
+        if(waterStock === 2){
+            stroke("lightorange");
+            fill("orange");
+            text(" "+waterStock,1500,90);
+        }
+        if(waterStock === 1 || waterStock === 0){
+            stroke("lightred");
+            fill("red");
+            text(" "+waterStock,1500,90);
+        }
+
         restartButton.visible = false
         score = score+1;
         if(keyDown(UP_ARROW)){
@@ -356,17 +408,20 @@ function draw(){
     if(ahB6.y>573){
         ahB6.y = 573;
     }
-    if(frameCount%400 === 0 && foodStock>0){
+    if(frameCount%500 === 0 && foodStock>0){
         foodStock = foodStock-1;
     }
-    if(frameCount%500 === 0 && waterStock>0){
+    if(frameCount%900 === 0 && waterStock>0){
         waterStock = waterStock-1;
+    }
+    if(mousePressedOver(rSt)){
+        foodStock + 5;
+        waterStock + 2 
     }
     randX = Math.round(random(1,3));
     randY = Math.round(random(1,3))
     drawSprites();
     ast.display();
-    //console.log(hour());
 }
 
 function spawnEnemy(){
@@ -397,23 +452,23 @@ function sB(){
 
 function getSupplies(){
     if(score%400 === 0){
-        fotw = createSprite(Math.round(random(100,1400)),Math.round(random(50,677)),20,20);
+        fotw = createSprite(Math.round(random(100,1400)),Math.round(random(50,677)),50,50);
         fotw.shapeColor = "orange";
         fotw.lifetime = 75;
         if(randX === 1){
-            fotw.velocityX = -20;
+            fotw.velocityX = -13;
         }
         else if(randX === 2){
-            fotw.veloctyX = 20;
+            fotw.veloctyX = 13;
         }
         else if(randX === 3){
             fotw.velocityX = 0;
         }
         if(randY === 1){
-            fotw.velocityY = -20;
+            fotw.velocityY = -13;
         }
         else if(randY === 2){
-            fotw.velocityY = 20;
+            fotw.velocityY = 13;
         }
         else if(randY === 3){
             fotw.velocityY = 0;
@@ -421,23 +476,23 @@ function getSupplies(){
         foodGroup.add(fotw)
     }
     if(score%900 === 0){
-        wotw = createSprite(Math.round(random(100,1400)),Math.round(random(50,677)),10,10);
+        wotw = createSprite(Math.round(random(100,1400)),Math.round(random(50,677)),50,50);
         wotw.shapeColor = "blue";
         wotw.lifetime = 100;
         if(randX === 1){
-            wotw.velocityX = -15;
+            wotw.velocityX = -13;
         }
         else if(randX === 2){
-            wotw.veloctyX = 15;
+            wotw.veloctyX = 13;
         }
         else if(randX === 3){
             wotw.velocityX = 0;
         }
         if(randY === 1){
-            wotw.velocityY = -15;
+            wotw.velocityY = -13;
         }
         else if(randY === 2){
-            wotw.velocityY = 15;
+            wotw.velocityY = 13;
         }
         else if(randY === 3){
             wotw.velocityY = 0;
@@ -446,7 +501,9 @@ function getSupplies(){
     }
 }
 
+
 function dT(){
+    /*
     rDT = Math.random(round(1,4));
     textSize(15);
     if(rDT === 1){
@@ -461,4 +518,5 @@ function dT(){
     if(rDT === 4){
         text("Predict your and the lazer's movements",740,350)
     }
+    */
 }
