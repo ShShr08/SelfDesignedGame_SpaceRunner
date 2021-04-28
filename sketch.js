@@ -123,7 +123,12 @@ function draw(){
     if(gameState === 0){
         background(bgG0);
         fill("white");
-        text("Click here to start playing",700,320);
+        if(foodStock<=2 && waterStock === 0){
+            text("Sorry but your food and water stock is very low, too bad you're gonna have to restart the page",520,320)
+        }
+        if(foodStock>2 && waterStock!= 0){
+            text("Click here to start playing",700,320);
+        }
         ahB.collide(ground);
         rSt.visible = true
         restartButton.visible = false
@@ -263,7 +268,7 @@ function draw(){
             text(" "+foodStock,1500,60);
         }
 
-        stroke("white");
+        noStroke(); 
         fill("white");
         text("Water Remaining =",1388,90);  
 
@@ -363,7 +368,21 @@ function draw(){
             gameState = 0;
             score = 0;
         }
-        dT();
+        /*
+        textSize(15);
+        if(rDT === 1){
+            text("well you could have done much better",740,350);
+        }
+        if(rDT === 2){
+            text("Nice start, you're doing better",745,350);
+        }
+        if(rDT === 3){
+            text("Try to not make that misate again",739,350);
+        }
+        if(rDT === 4){
+            text("Predict your and the lazer's movements",740,350)
+        }
+        */
     }
 
     if(astpos.y>575){
@@ -418,6 +437,7 @@ function draw(){
         foodStock + 5;
         waterStock + 2 
     }
+    rDT = Math.random(round(1,4));
     randX = Math.round(random(1,3));
     randY = Math.round(random(1,3))
     drawSprites();
@@ -444,9 +464,6 @@ function sB(){
         if(gameState === 0){
             startButton.visible = true
         }
-    }
-    if(mousePressedOver(startButton) && foodStock<=1 && waterStock === 0){
-        text("Sorry but your food and water stock is very low, too bad you're gonna have to restart the page",300,500)
     }
 }
 
@@ -502,21 +519,4 @@ function getSupplies(){
 }
 
 
-function dT(){
-    /*
-    rDT = Math.random(round(1,4));
-    textSize(15);
-    if(rDT === 1){
-        text("well you could have done much better",740,350);
-    }
-    if(rDT === 2){
-        text("Nice start, you're doing better",745,350);
-    }
-    if(rDT === 3){
-        text("Try to not make that misate again",739,350);
-    }
-    if(rDT === 4){
-        text("Predict your and the lazer's movements",740,350)
-    }
-    */
-}
+
