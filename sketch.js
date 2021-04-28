@@ -548,33 +548,33 @@ function getSupplies(){
 }
 
 function youreDead(){
-    rand = Math.round(random(1,3))
+    rand = 2
     if(rand === 1){
         if(score%1000 === 0){
             eM = createSprite(20,150,10,10);
             eM.addImage(emI);
             eM.scale = 0.2;
-            eM.lifetime = 5;
+            eM.lifetime = 60;
             eM2 = createSprite(1516,150,10,10);
             eM2.addImage(emI);
             eM2.scale = 0.2;
-            eM2.lifetime = 5;
+            eM2.lifetime = 60;
             eM3 = createSprite(20,450,10,10);
             eM3.addImage(emI);
             eM3.scale = 0.2;
-            eM3.lifetime = 5;
+            eM3.lifetime = 60;
             eM4 = createSprite(1516,450,10,10);
             eM4.addImage(emI);
             eM4.scale = 0.2;
-            eM4.lifetime = 5;
+            eM4.lifetime = 60;
         }
-        if(score%1100 === 0){
+        if(score%1050 === 0){
             dR = createSprite(768,150,1536,5);
             dR.shapeColor = "red";
-            dR.lifetime = 10;
+            dR.lifetime = 100;
             dR2 = createSprite(768,450,1536,5);
             dR2.shapeColor = "red";
-            dR2.lifetime = 10;
+            dR2.lifetime = 100;
             dRG.add(dR);
             dRG.add(dR2);
         }
@@ -584,38 +584,38 @@ function youreDead(){
             eM = createSprite(384,20,10,10);
             eM.addImage(emI);
             eM.scale = 0.2;
-            eM.lifetime = 5;
+            eM.lifetime = 60;
             eM2 = createSprite(384,702,10,10);
             eM2.addImage(emI);
             eM2.scale = 0.2;
-            eM2.lifetime = 5;
+            eM2.lifetime = 60;
             eM3 = createSprite(768,20,10,10);
             eM3.addImage(emI);
             eM3.scale = 0.2;
-            eM3.lifetime = 5;
+            eM3.lifetime = 60;
             eM4 = createSprite(768,702,10,10);
             eM4.addImage(emI);
             eM4.scale = 0.2;
-            eM4.lifetime = 5;
+            eM4.lifetime = 60;
             eM5 = createSprite(1152,20,10,10);
             eM5.addImage(emI);
             eM5.scale = 0.2;
-            eM5.lifetime = 5;
+            eM5.lifetime = 60;
             eM6 = createSprite(1152,702,10,10);
             eM6.addImage(emI);
             eM6.scale = 0.2;
-            eM6.lifetime = 5;
+            eM6.lifetime = 60;
         }
-        if(score%600 === 0){
+        if(score%550 === 0){
             dR = createSprite(384,361,5,722);
             dR.shapeColor = "red";
-            dR.lifetime = 10;
+            dR.lifetime = 100;
             dR2 = createSprite(768,361,5,722);
             dR2.shapeColor = "red";
-            dR2.lifetime = 10;
+            dR2.lifetime = 100;
             dR3 = createSprite(1152,361,5,722);
             dR3.shapeColor = "red";
-            dR3.lifetime = 10;
+            dR3.lifetime = 100;
             dRG.add(dR);
             dRG.add(dR2);
             dRG.add(dR3);
@@ -626,29 +626,32 @@ function youreDead(){
             eM = createSprite(768,20,10,10);
             eM.addImage(emI);
             eM.scale = 0.2;
-            eM.lifetime = 5;
+            eM.lifetime = 60;
             eM2 = createSprite(768,702,10,10);
             eM2.addImage(emI);
             eM2.scale = 0.2;
-            eM2.lifetime = 5;
+            eM2.lifetime = 60;
             eM3 = createSprite(20,361,10,10);
             eM3.addImage(emI);
             eM3.scale = 0.2;
-            eM3.lifetime = 5;
+            eM3.lifetime = 60;
             eM4 = createSprite(1516,361,10,10);
             eM4.addImage(emI);
             eM4.scale = 0.2;
-            eM4.lifetime = 5;
+            eM4.lifetime = 60;
         }
-        if(score%1600 === 0){
+        if(score%1550 === 0){
             dR = createSprite(768,361,1536,5);
             dR.shapeColor = "red";
-            dR.lifetime = 10;
+            dR.lifetime = 100;
             dR2 = createSprite(361,768,1536,5);
             dR2.shapeColor = "red";
-            dR2.lifetime = 10;
+            dR2.lifetime = 100;
             dRG.add(dR);
             dRG.add(dR2);
         }
     }
 }
+
+
+
