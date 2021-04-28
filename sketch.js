@@ -22,7 +22,8 @@ var randX,randY;
 var foodGroup;
 var waterGroup;
 var restartButton;
-
+var emI;
+var dRG
 
 const Engine = Matter.Engine;
 const World = Matter.World;
@@ -46,6 +47,7 @@ function preload(){
     wI1 = loadImage("images/Water1.png");
     fmI = loadImage("images/CannedFood1.png");
     flI = loadImage("images/CannedFood2.png");
+    emI = loadImage("images/eM.png");
 }
 
 
@@ -117,6 +119,7 @@ function setup(){
     lG = new Group();
     foodGroup = new Group();
     waterGroup = new Group();
+    dRG = new Group();
 }
 
 function draw(){
@@ -300,16 +303,25 @@ function draw(){
 
         restartButton.visible = false
         score = score+1;
-        if(keyDown(UP_ARROW)){
+        if(keyDown('w')){
             astpos.y = astpos.y -10;
-            ahB.y = ahB.y -10;
-            ahB2.y = ahB2.y -10;
-            ahB3.y = ahB3.y -10;
-            ahB4.y = ahB4.y -10;
-            ahB5.y = ahB5.y -10;
-            ahB6.y = ahB6.y -10;
+            ahB.y = ahB.y-10;
+            ahB2.y = ahB2.y-10;
+            ahB3.y = ahB3.y-10;
+            ahB4.y = ahB4.y-10;
+            ahB5.y = ahB5.y-10;
+            ahB6.y = ahB6.y-10;
+        }
+        if(keyDown('a')){
+            astpos.x = astpos.x -10;
+            ahB.x = ahB.x-10;
+            ahB2.x = ahB2.x-10;
+            ahB3.x = ahB3.x-10;
+            ahB4.x = ahB4.x-10;
+            ahB5.x = ahB5.x-10;
+            ahB6.x = ahB6.x-10;
         } 
-        if(keyDown(DOWN_ARROW)){
+        if(keyDown('s')){
             astpos.y = astpos.y +2.5;
             ahB.y = ahB.y+2.5;
             ahB2.y = ahB2.y+2.5;
@@ -318,6 +330,15 @@ function draw(){
             ahB5.y = ahB5.y+2.5;
             ahB6.y = ahB6.y+2.5;
         }
+        if(keyDown('d')){
+            astpos.x = astpos.x+10;
+            ahB.x = ahB.x+10;
+            ahB2.x = ahB2.x+10;
+            ahB3.x = ahB3.x+10;
+            ahB4.x = ahB4.x+10;
+            ahB5.x = ahB5.x+10;
+            ahB6.x = ahB6.x+10;
+        } 
         astpos.y = astpos.y+3;
         ahB.y = ahB.y+3;
         ahB2.y = ahB2.y+3;
@@ -330,6 +351,11 @@ function draw(){
             lG.destroyEach();
             gameState = 2
         }
+
+        if(ahbG.isTouching(dRG)){
+            gameState = 2;
+        }
+        
         w5.visible = false
         w4.visible = false
         w3.visible = false
@@ -353,6 +379,7 @@ function draw(){
         }
 
         getSupplies();
+        youreDead();
         spawnEnemy();
     }
 
@@ -435,7 +462,8 @@ function draw(){
     }
     if(mousePressedOver(rSt)){
         foodStock + 5;
-        waterStock + 2 
+        waterStock + 2;
+        console.log(hour());
     }
     rDT = Math.random(round(1,4));
     randX = Math.round(random(1,3));
@@ -446,8 +474,9 @@ function draw(){
 
 function spawnEnemy(){
     if(frameCount%100 === 0){
-        Lazer = createSprite(1550,Math.round(random(10,650)),Math.round(random(50,200)),Math.round(random(50,200)));
-        Lazer.shapeColor = "red";
+        Lazer = createSprite(1550,Math.round(random(10,650)),Math.round(random(50,150)),Math.round(random(50,150    )));
+        stroke("red");
+        Lazer.shapeColor = "darkorange";
         Lazer.velocityX = -13;
         lG.add(Lazer);
     }
@@ -518,5 +547,108 @@ function getSupplies(){
     }
 }
 
-
-
+function youreDead(){
+    rand = Math.round(random(1,3))
+    if(rand === 1){
+        if(score%1000 === 0){
+            eM = createSprite(20,150,10,10);
+            eM.addImage(emI);
+            eM.scale = 0.2;
+            eM.lifetime = 5;
+            eM2 = createSprite(1516,150,10,10);
+            eM2.addImage(emI);
+            eM2.scale = 0.2;
+            eM2.lifetime = 5;
+            eM3 = createSprite(20,450,10,10);
+            eM3.addImage(emI);
+            eM3.scale = 0.2;
+            eM3.lifetime = 5;
+            eM4 = createSprite(1516,450,10,10);
+            eM4.addImage(emI);
+            eM4.scale = 0.2;
+            eM4.lifetime = 5;
+        }
+        if(score%1100 === 0){
+            dR = createSprite(768,150,1536,5);
+            dR.shapeColor = "red";
+            dR.lifetime = 10;
+            dR2 = createSprite(768,450,1536,5);
+            dR2.shapeColor = "red";
+            dR2.lifetime = 10;
+            dRG.add(dR);
+            dRG.add(dR2);
+        }
+    }
+    if(rand === 2){
+        if(score%500 === 0){
+            eM = createSprite(384,20,10,10);
+            eM.addImage(emI);
+            eM.scale = 0.2;
+            eM.lifetime = 5;
+            eM2 = createSprite(384,702,10,10);
+            eM2.addImage(emI);
+            eM2.scale = 0.2;
+            eM2.lifetime = 5;
+            eM3 = createSprite(768,20,10,10);
+            eM3.addImage(emI);
+            eM3.scale = 0.2;
+            eM3.lifetime = 5;
+            eM4 = createSprite(768,702,10,10);
+            eM4.addImage(emI);
+            eM4.scale = 0.2;
+            eM4.lifetime = 5;
+            eM5 = createSprite(1152,20,10,10);
+            eM5.addImage(emI);
+            eM5.scale = 0.2;
+            eM5.lifetime = 5;
+            eM6 = createSprite(1152,702,10,10);
+            eM6.addImage(emI);
+            eM6.scale = 0.2;
+            eM6.lifetime = 5;
+        }
+        if(score%600 === 0){
+            dR = createSprite(384,361,5,722);
+            dR.shapeColor = "red";
+            dR.lifetime = 10;
+            dR2 = createSprite(768,361,5,722);
+            dR2.shapeColor = "red";
+            dR2.lifetime = 10;
+            dR3 = createSprite(1152,361,5,722);
+            dR3.shapeColor = "red";
+            dR3.lifetime = 10;
+            dRG.add(dR);
+            dRG.add(dR2);
+            dRG.add(dR3);
+        }
+    }
+    if(rand === 3){
+        if(score%1500 === 0){
+            eM = createSprite(768,20,10,10);
+            eM.addImage(emI);
+            eM.scale = 0.2;
+            eM.lifetime = 5;
+            eM2 = createSprite(768,702,10,10);
+            eM2.addImage(emI);
+            eM2.scale = 0.2;
+            eM2.lifetime = 5;
+            eM3 = createSprite(20,361,10,10);
+            eM3.addImage(emI);
+            eM3.scale = 0.2;
+            eM3.lifetime = 5;
+            eM4 = createSprite(1516,361,10,10);
+            eM4.addImage(emI);
+            eM4.scale = 0.2;
+            eM4.lifetime = 5;
+        }
+        if(score%1600 === 0){
+            dR = createSprite(768,361,1536,5);
+            dR.shapeColor = "red";
+            dR.lifetime = 10;
+            dR2 = createSprite(361,768,1536,5);
+            dR2.shapeColor = "red";
+            dR2.lifetime = 10;
+            dRG.add(dR);
+            dRG.add(dR2);
+        }
+    }
+}
