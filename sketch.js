@@ -23,7 +23,18 @@ var foodGroup;
 var waterGroup;
 var restartButton;
 var emI;
-var dRG
+var dRG;
+var coins = 10;
+var gems = 0;
+var Shop;
+var lSval = 0;
+var fSVal = 0;
+var wsVal = 0;
+var dailyQuest;
+var Quest;
+var goBack;
+var halp;
+var halpval = 0
 
 const Engine = Matter.Engine;
 const World = Matter.World;
@@ -116,6 +127,9 @@ function setup(){
     restartButton = createSprite(768,361,50,50);
     rSt = createSprite(1525,10,25,25);
 
+    halp = createSprite(250,25,50,50)
+    Shop = createSprite(25,25,50,50);
+    Shop.visible = false
     lG = new Group();
     foodGroup = new Group();
     waterGroup = new Group();
@@ -233,6 +247,20 @@ function draw(){
             w2.visible = false
             w1.visible = false
         }
+        
+        textSize = 15;
+        fill("white")
+        text("<- MarketPlace",75,30);
+        Shop.visible = true
+        if(mousePressedOver(Shop)){
+            gameState = 3;
+        }
+        halp.visible = true
+        text("<- Help",300,30);
+        if(mousePressedOver(halp) && halpval === 0){
+            window.open("https://shansharma08.github.io/-SelfDesignedGame-SpaceRunner_Help/");
+            halpval = halpval+1
+        }
         sB();
     }
 
@@ -240,11 +268,32 @@ function draw(){
 
     if(gameState === 1){
         background(bgG1);
+        halp.visible = false
         fill("white");
-        textSize(13);
+        textsize = 13;
         text("Score : "+score,1387,30);
         text("Food Remaining =",1387,60);
-
+        if(lsVal === 0){
+            Lazer.velocityX = -13;
+        }
+        if(lsVal === 2){
+            Lazer.velocityX = -12;
+        }
+        if(lsVal === 3){
+            Lazer.velocityX = -11;
+        }
+        if(lsVal === 4){
+            Lazer.velocityX = -10;
+        }
+        if(lsVal === 5){
+            Lazer.velocityX = -9;
+        }
+        if(lsVal === 6){
+            Lazer.velocityX = -8;
+        }
+        if(lsVal === 7){
+            Lazer.velocityX = -7;
+        }
         if(foodStock >8 || foodStock ===8){
             stroke("lightgreen");
             fill("darkgreen");
@@ -301,6 +350,7 @@ function draw(){
             text(" "+waterStock,1500,90);
         }
 
+        Shop.visible = false
         restartButton.visible = false
         score = score+1;
         if(keyDown('w')){
@@ -386,9 +436,11 @@ function draw(){
 
 
 
-    else if(gameState === 2){
+    if(gameState === 2){
         rc.visible = false
+        Shop.visible = false
         restartButton.visible = true;
+        halp.visible = false
         lG.setVelocityXEach(0);
         foodGroup.destroyEach();
         waterGroup.destroyEach();
@@ -412,6 +464,32 @@ function draw(){
         }
         */
     }
+
+    if(gameState === 3){
+        background("black");
+        restartButton.visible = false
+        startButton.visible = false
+        rc.visible = false
+        fm.visible = false
+        fl.visible = false
+        w5.visible = false
+        w4.visible = false
+        w3.visible = false
+        w2.visible = false
+        w1.visible = false
+        Shop.visible = false
+        ground.visible = false
+        halp.visible = false
+        
+        fill("yellow");
+        text("Upgrades = ",450,450);
+        fill("white");
+        text("Lazer "+lSval,450,500);
+        text("Food "+fSVal,450,550);
+        text("Water "+wsVal,450,600);
+
+        buyStuff();
+    }
     
     
     if(frameCount%500 === 0 && foodStock>0){
@@ -423,7 +501,7 @@ function draw(){
     if(mousePressedOver(rSt)){
         foodStock + 5;
         waterStock + 2;
-        console.log(hour());
+        //console.log(hour());
     }
     rDT = Math.random(round(1,4));
     randX = Math.round(random(1,3));
@@ -431,7 +509,7 @@ function draw(){
     rand = Math.round(random(1,3));
     drawSprites();
     ast.display();
-    console.log(rand);
+    //console.log(rand);
 }
 
 function spawnEnemy(){
@@ -439,14 +517,13 @@ function spawnEnemy(){
         Lazer = createSprite(1550,Math.round(random(10,650)),Math.round(random(50,150)),Math.round(random(50,150    )));
         stroke("red");
         Lazer.shapeColor = "darkorange";
-        Lazer.velocityX = -13;
         lG.add(Lazer);
     }
 }
 
 function sB(){
     if(foodStock >=2 && waterStock>=1){ 
-        if(mousePressedOver(startButton)){
+        if(mousePressedOver(startButton) && gameState === 0){
             gameState = 1
         }
         if(gameState === 1 || gameState === 2){
@@ -507,6 +584,33 @@ function getSupplies(){
         }
         waterGroup.add(wotw)
     }
+}
+
+function buyStuff(){
+    box1 = createSprite(100,150,10,126);
+    box1.shapeColor = "white";
+    box2 = createSprite(250,92,300,10);
+    box2.shapeColor = "white";
+    box3 = createSprite(250,208,300,10);
+    box3.shapeColor = "white";
+    box4 = createSprite(400,150,10,126);
+    box4.shapeColor = "white";
+    buy1 = createSprite(367,150,50,100);
+    buy1.shapeColor = "green";
+    if(mousePressedOver(buy1) && coins === 50 && lsVal<7){
+        coins = coins-50; 
+        lSval = lsVal+1
+    }
+
+    fill("pink");
+    text("Lazer Speed",115,120);
+    fill("yellow")
+    text("Reduces the lazer's speed, making",115,150);
+    text("the game much more easier!",115,180);
+    text("Buy")
+
+    
+    
 }
 
 function youreDead(){
