@@ -377,7 +377,8 @@ function draw(){
                 foodGroup[i].destroy();
             }
         }
-
+        
+        preventOverMovement();
         getSupplies();
         youreDead();
         spawnEnemy();
@@ -411,49 +412,8 @@ function draw(){
         }
         */
     }
-
-    if(astpos.y>575){
-        astpos.y = 575;
-    }
-    if(astpos.y<=125){
-        astpos.y = 125;
-    }
-    if(ahB.y<=36){
-        ahB.y = 36;
-    }
-    if(ahB2.y<=98){
-        ahB2.y = 98;
-    }
-    if(ahB3.y<=184){
-        ahB3.y = 184;
-    }
-    if(ahB4.y<=0){
-        ahB4.y = 0;
-    }
-    if(ahB5.y<=254){
-        ahB5.y = 254;
-    }
-    if(ahB6.y<=125){
-        ahB6.y = 125;
-    }
-    if(ahB.y>483){
-        ahB.y = 483;
-    }
-    if(ahB2.y>545){
-        ahB2.y = 545;
-    }
-    if(ahB3.y>631){
-        ahB3.y = 631;
-    }
-    if(ahB4.y>446){
-        ahB4.y = 446;
-    }
-    if(ahB5.y>700){
-        ahB5.y = 700;
-    }
-    if(ahB6.y>573){
-        ahB6.y = 573;
-    }
+    
+    
     if(frameCount%500 === 0 && foodStock>0){
         foodStock = foodStock-1;
     }
@@ -468,8 +428,10 @@ function draw(){
     rDT = Math.random(round(1,4));
     randX = Math.round(random(1,3));
     randY = Math.round(random(1,3))
+    rand = Math.round(random(1,3));
     drawSprites();
     ast.display();
+    console.log(rand);
 }
 
 function spawnEnemy(){
@@ -548,7 +510,6 @@ function getSupplies(){
 }
 
 function youreDead(){
-    rand = 2
     if(rand === 1){
         if(score%1000 === 0){
             eM = createSprite(20,150,10,10);
@@ -653,5 +614,94 @@ function youreDead(){
     }
 }
 
+function preventOverMovement(){
+    //prevent from going up
+    if(astpos.y>575){
+        astpos.y = 575;
+    }
+    if(astpos.y<=125){
+        astpos.y = 125;
+    }
+    if(ahB.y<=36){
+        ahB.y = 36;
+    }
+    if(ahB2.y<=98){
+        ahB2.y = 98;
+    }
+    if(ahB3.y<=184){
+        ahB3.y = 184;
+    }
+    if(ahB4.y<=0){
+        ahB4.y = 0;
+    }
+    if(ahB5.y<=254){
+        ahB5.y = 254;
+    }
+    if(ahB6.y<=125){
+        ahB6.y = 125;
+    }
+    if(ahB.y>483){
+        ahB.y = 483;
+    }
+    if(ahB2.y>545){
+        ahB2.y = 545;
+    }
+    if(ahB3.y>631){
+        ahB3.y = 631;
+    }
+    if(ahB4.y>446){
+        ahB4.y = 446;
+    }
+    if(ahB5.y>700){
+        ahB5.y = 700;
+    }
+    if(ahB6.y>573){
+        ahB6.y = 573;
+    }
+    
+    //prevent from going left
+    if(astpos.x<90){
+        astpos.x = 90;
+    }
+    if(ahB.x<=150){
+        ahB.x = 150;
+    }
+    if(ahB2.x<=180){
+        ahB2.x = 180;
+    }
+    if(ahB3.x<=153){
+        ahB3.x = 153;
+    }
+    if(ahB4.x<=75){
+        ahB4.x = 75;
+    }
+    if(ahB5.x<=75){
+        ahB5.x = 75;
+    }
+    if(ahB6.x<=0){
+        ahB6.x = 0;
+    }
 
-
+    //prevent from going right
+    if(astpos.x>1446){
+        astpos.x = 1446;
+    }
+    if(ahB.x>=1386){
+        ahB.x = 1386;
+    }
+    if(ahB2.x>=1356){
+        ahB2.x = 1356;
+    }
+    if(ahB3.x>=1383){
+        ahB3.x = 1383;
+    }
+    if(ahB4.x>=1461){
+        ahB4.x = 1461;
+    }
+    if(ahB5.x>=1461){
+        ahB5.x = 1461;
+    }
+    if(ahB6.x>=1536){
+        ahB6.x = 1536;
+    }
+}
