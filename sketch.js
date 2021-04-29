@@ -24,17 +24,17 @@ var waterGroup;
 var restartButton;
 var emI;
 var dRG;
-var coins = 10;
-var gems = 0;
+var coins = 50,coinImage,coin;
+var gems = 0,gemImage;
 var Shop;
-var lSval = 0;
+var lSVal = 0;
 var fSVal = 0;
 var wsVal = 0;
 var dailyQuest;
 var Quest;
 var goBack;
 var halp;
-var halpval = 0
+var halpval = 0;
 
 const Engine = Matter.Engine;
 const World = Matter.World;
@@ -59,6 +59,7 @@ function preload(){
     fmI = loadImage("images/CannedFood1.png");
     flI = loadImage("images/CannedFood2.png");
     emI = loadImage("images/eM.png");
+    coinImage = loadImage("images/coin.png");
 }
 
 
@@ -127,8 +128,12 @@ function setup(){
     restartButton = createSprite(768,361,50,50);
     rSt = createSprite(1525,10,25,25);
 
-    halp = createSprite(250,25,50,50)
+    halp = createSprite(250,25,50,50);
     Shop = createSprite(25,25,50,50);
+    coin = createSprite(1450,35,5,5);
+    coin.addImage(coinImage);
+    coin.scale = 0.1
+
     Shop.visible = false
     lG = new Group();
     foodGroup = new Group();
@@ -139,6 +144,7 @@ function setup(){
 function draw(){
     if(gameState === 0){
         background(bgG0);
+        coin.visible = true
         fill("white");
         if(foodStock<=2 && waterStock === 0){
             text("Sorry but your food and water stock is very low, too bad you're gonna have to restart the page",520,320)
@@ -149,6 +155,7 @@ function draw(){
         ahB.collide(ground);
         rSt.visible = true
         restartButton.visible = false
+        text(" "+coins,1460,40);
         if(foodStock >8 || foodStock ===8){
             fill("darkgreen");
             text("Food supply = "+foodStock,1125,500);
@@ -269,31 +276,11 @@ function draw(){
     if(gameState === 1){
         background(bgG1);
         halp.visible = false
+        coin.visible = false
         fill("white");
-        textsize = 13;
+        textSize = 13;
         text("Score : "+score,1387,30);
-        text("Food Remaining =",1387,60);
-        if(lsVal === 0){
-            Lazer.velocityX = -13;
-        }
-        if(lsVal === 2){
-            Lazer.velocityX = -12;
-        }
-        if(lsVal === 3){
-            Lazer.velocityX = -11;
-        }
-        if(lsVal === 4){
-            Lazer.velocityX = -10;
-        }
-        if(lsVal === 5){
-            Lazer.velocityX = -9;
-        }
-        if(lsVal === 6){
-            Lazer.velocityX = -8;
-        }
-        if(lsVal === 7){
-            Lazer.velocityX = -7;
-        }
+        text("Food Remaining =",1387,60);        
         if(foodStock >8 || foodStock ===8){
             stroke("lightgreen");
             fill("darkgreen");
@@ -484,10 +471,11 @@ function draw(){
         fill("yellow");
         text("Upgrades = ",450,450);
         fill("white");
-        text("Lazer "+lSval,450,500);
+        text("Lazer "+lSVal,450,500);
         text("Food "+fSVal,450,550);
         text("Water "+wsVal,450,600);
 
+        coin.visible = true
         buyStuff();
     }
     
@@ -518,6 +506,30 @@ function spawnEnemy(){
         stroke("red");
         Lazer.shapeColor = "darkorange";
         lG.add(Lazer);
+        if(lSVal === 0){
+            Lazer.velocityX = -13;
+        }
+        if(lSVal === 1){
+            Lazer.velocityX = -12;
+        }
+        if(lSVal === 2){
+            Lazer.velocityX = -11;
+        }
+        if(lSVal === 3){
+            Lazer.velocityX = -10;
+        }
+        if(lSVal === 4){
+            Lazer.velocityX = -9;
+        }
+        if(lSVal === 5){
+            Lazer.velocityX = -8;
+        }
+        if(lSVal === 6){
+            Lazer.velocityX = -7;
+        }
+        if(lSVal === 7){
+            Lazer.velocityX = -6;
+        }
     }
 }
 
@@ -540,25 +552,117 @@ function getSupplies(){
         fotw = createSprite(Math.round(random(100,1400)),Math.round(random(50,677)),50,50);
         fotw.shapeColor = "orange";
         fotw.lifetime = 75;
+        foodGroup.add(fotw)
         if(randX === 1){
-            fotw.velocityX = -13;
+            if(fSVal === 0){
+                fotw.velocityX = -13;
+            }
+            if(fSVal === 1){
+                fotw.velocityX = -12;
+            }
+            if(fSVal === 2){
+                fotw.velocityX = -11;
+            }
+            if(fSVal === 3){
+                fotw.velocityX = -10;
+            }
+            if(fSVal === 4){
+                fotw.velocityX = -9;
+            }
+            if(fSVal === 5){
+                fotw.velocityX = -8;
+            }
+            if(fSVal === 6){
+                fotw.velocityX = -7;
+            }
+            if(fSVal === 7){
+                fotw.velocityX = -6;
+            }
         }
         else if(randX === 2){
-            fotw.veloctyX = 13;
+            if(fsVal === 0){
+                fotw.veloctyX = 13;
+            }
+            if(fsVal === 1){
+                fotw.veloctyX = 12;
+            }
+            if(fsVal === 2){
+                fotw.veloctyX = 11;
+            }
+            if(fsVal === 3){
+                fotw.veloctyX = 10;
+            }
+            if(fsVal === 4){
+                fotw.veloctyX = 9;
+            }
+            if(fsVal === 5){
+                fotw.veloctyX = 8;
+            }
+            if(fsVal === 6){
+                fotw.veloctyX = 7;
+            }
+            if(fsVal === 7){
+                fotw.veloctyX = 6;
+            }
         }
         else if(randX === 3){
             fotw.velocityX = 0;
         }
         if(randY === 1){
-            fotw.velocityY = -13;
+            if(fsVal === 0){
+                fotw.velocityY = -13;
+            }
+            if(fsVal === 1){
+                fotw.velocityY = -12;
+            }
+            if(fsVal === 2){
+                fotw.velocityY = -11;
+            }
+            if(fsVal === 3){
+                fotw.velocityY = -10;
+            }
+            if(fsVal === 4){
+                fotw.velocityY = -9;
+            }
+            if(fsVal === 5){
+                fotw.velocityY = -8;
+            }
+            if(fsVal === 6){
+                fotw.velocityY = -7;
+            }
+            if(fsVal === 7){
+                fotw.velocityY = -6;
+            }
         }
         else if(randY === 2){
-            fotw.velocityY = 13;
+            if(fotw === 0){
+                fotw.velocityY = 13;
+            }
+            if(fotw === 1){
+                fotw.velocityY = 12;
+            }
+            if(fotw === 2){
+                fotw.velocityY = 11;
+            }
+            if(fotw === 3){
+                fotw.velocityY = 10;
+            }
+            if(fotw === 4){
+                fotw.velocityY = 9;
+            }
+            if(fotw === 5){
+                fotw.velocityY = 8;
+            }
+            if(fotw === 6){
+                fotw.velocityY = 7;
+            }
+            if(fotw === 7){
+                fotw.velocityY = 6;
+            }
         }
         else if(randY === 3){
             fotw.velocityY = 0;
         }
-        foodGroup.add(fotw)
     }
     if(score%900 === 0){
         wotw = createSprite(Math.round(random(100,1400)),Math.round(random(50,677)),50,50);
@@ -587,6 +691,7 @@ function getSupplies(){
 }
 
 function buyStuff(){
+    //Pt1
     box1 = createSprite(100,150,10,126);
     box1.shapeColor = "white";
     box2 = createSprite(250,92,300,10);
@@ -597,20 +702,61 @@ function buyStuff(){
     box4.shapeColor = "white";
     buy1 = createSprite(367,150,50,100);
     buy1.shapeColor = "green";
-    if(mousePressedOver(buy1) && coins === 50 && lsVal<7){
+    if(mousePressedOver(buy1) && coins === 50 && lSVal<7){
         coins = coins-50; 
-        lSval = lsVal+1
+        lSVal = lSVal+1
     }
+    if(mousePressedOver(buy1) && coins<50){
+        text("Try purchasing this once you have more money",125,250);
+    }
+    CoinBuyStuff1 = createSprite(250,115,10,10);
+    CoinBuyStuff1.addImage(coinImage);
+    CoinBuyStuff1.scale = 0.1;
+    
+    CoinLeft = createSprite(1450,35,5,5);
+    CoinLeft.addImage(coinImage);
+    CoinLeft.scale = 0.1
+    text(" "+coins,1460,40);
 
     fill("pink");
     text("Lazer Speed",115,120);
     fill("yellow")
     text("Reduces the lazer's speed, making",115,150);
     text("the game much more easier!",115,180);
-    text("Buy")
+    fill("white")
+    text("Price =       50 coins",200,120);
 
-    
-    
+    //Pt2
+    box1 = createSprite(600,150,10,126);
+    box1.shapeColor = "white";
+    box2 = createSprite(750,92,300,10);
+    box2.shapeColor = "white";
+    box3 = createSprite(750,208,300,10);
+    box3.shapeColor = "white";
+    box4 = createSprite(900,150,10,126);
+    box4.shapeColor = "white";
+    buy2 = createSprite(867,150,50,100);
+    buy2.shapeColor = "green";
+
+    CoinBuyStuff1 = createSprite(750,115,10,10);
+    CoinBuyStuff1.addImage(coinImage);
+    CoinBuyStuff1.scale = 0.1;
+
+    if(mousePressedOver(buy2) && coins === 100 && fSVal<7){
+        coins = coins-100; 
+        fSVal = fSVal+1
+    }
+    if(mousePressedOver(buy2) && coins<100){
+        text("Try purchasing this once you have more money",625,250);
+    }
+
+    fill("orange");
+    text("Food Speed",615,120);
+    fill("yellow")
+    text("Reduces the food's speed, collecting",615,150);
+    text("food has never been easier!",615,180);
+    fill("white")
+    text("Price =       100 coins",700,120);
 }
 
 function youreDead(){
