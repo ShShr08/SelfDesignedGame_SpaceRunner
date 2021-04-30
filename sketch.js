@@ -26,15 +26,18 @@ var emI;
 var dRG;
 var coins = 50,coinImage,coin;
 var gems = 0,gemImage;
-var Shop;
+var Shop,ShopImage,canSeeShop;
 var lSVal = 0;
 var fSVal = 0;
-var wsVal = 0;
+var wSVal = 0;
 var dailyQuest;
 var Quest;
-var goBack;
-var halp;
+var goBack,goBackImage;
+var halp,helpImage;
 var halpval = 0;
+var box1,box2,box3,box4,box5,box6,box7,box8,box9,box10,box11,box12;
+var CoinBuyStuff1,CoinBuyStuff2,CoinBuyStuff3;
+var buy1,buy2,buy3
 
 const Engine = Matter.Engine;
 const World = Matter.World;
@@ -60,6 +63,9 @@ function preload(){
     flI = loadImage("images/CannedFood2.png");
     emI = loadImage("images/eM.png");
     coinImage = loadImage("images/coin.png");
+    goBackImage = loadImage("images/goBak.png");
+    helpImage = loadImage("images/HelpButtonImage.png");
+    ShopImage = loadImage("images/MarketPlaceImage.png");
 }
 
 
@@ -75,6 +81,7 @@ function setup(){
     */
     ground = createSprite(768,720,1536,50);
     ground.addImage(gImg);
+    ground.visible = true
 
     ast = new Astronaught(300,575,300,300);
     astpos = ast.body.position;
@@ -129,10 +136,62 @@ function setup(){
     rSt = createSprite(1525,10,25,25);
 
     halp = createSprite(250,25,50,50);
+    halp.addImage(helpImage);
+    halp.scale = 0.1;
+    canSeeShop = createSprite(25,25,50,50);
+    canSeeShop.shapeColor = "white";
     Shop = createSprite(25,25,50,50);
+    Shop.addImage(ShopImage);
+    Shop.scale = 0.2;
     coin = createSprite(1450,35,5,5);
     coin.addImage(coinImage);
-    coin.scale = 0.1
+    coin.scale = 0.1;
+
+    box1 = createSprite(100,150,10,126);
+    box1.shapeColor = "white";
+    box2 = createSprite(250,92,300,10);
+    box2.shapeColor = "white";
+    box3 = createSprite(250,208,300,10);
+    box3.shapeColor = "white";
+    box4 = createSprite(400,150,10,126);
+    box4.shapeColor = "white";
+    buy1 = createSprite(367,150,50,100);
+    buy1.shapeColor = "green";
+    CoinBuyStuff1 = createSprite(250,115,10,10);
+    CoinBuyStuff1.addImage(coinImage);
+    CoinBuyStuff1.scale = 0.1;
+
+    box5 = createSprite(600,150,10,126);
+    box5.shapeColor = "white";
+    box6 = createSprite(750,92,300,10);
+    box6.shapeColor = "white";
+    box7 = createSprite(750,208,300,10);
+    box7.shapeColor = "white";
+    box8 = createSprite(900,150,10,126);
+    box8.shapeColor = "white";
+    buy2 = createSprite(867,150,50,100);
+    buy2.shapeColor = "green";
+    CoinBuyStuff2 = createSprite(750,115,10,10);
+    CoinBuyStuff2.addImage(coinImage);
+    CoinBuyStuff2.scale = 0.1;
+
+    box9 = createSprite(1100,150,10,126);
+    box9.shapeColor = "white";
+    box10 = createSprite(1250,92,300,10);
+    box10.shapeColor = "white";
+    box11 = createSprite(1250,208,300,10);
+    box11.shapeColor = "white";
+    box12 = createSprite(1400,150,10,126);
+    box12.shapeColor = "white";
+    buy3 = createSprite(1367,150,50,100);
+    buy3.shapeColor = "green";
+    CoinBuyStuff3 = createSprite(1250,115,10,10);
+    CoinBuyStuff3.addImage(coinImage);
+    CoinBuyStuff3.scale = 0.1;
+
+    goBack = createSprite(30,692,20,20);
+    goBack.addImage(goBackImage);
+    goBack.scale = 0.15
 
     Shop.visible = false
     lG = new Group();
@@ -144,7 +203,48 @@ function setup(){
 function draw(){
     if(gameState === 0){
         background(bgG0);
+        ground.visible = true
+        canSeeShop.visible = true
         coin.visible = true
+        box1.visible = false
+        box2.visible = false
+        box3.visible = false
+        box4.visible = false
+        box5.visible = false
+        box6.visible = false
+        box7.visible = false
+        box8.visible = false
+        box9.visible = false
+        box10.visible = false
+        box11.visible = false
+        box12.visible = false
+
+        rc.visible = true
+
+        buy1.visible = false
+        buy2.visible = false
+        buy3.visible = false
+
+        CoinBuyStuff1.visible = false
+        CoinBuyStuff2.visible = false
+        CoinBuyStuff3.visible = false
+
+        goBack.visible = false
+
+        astpos.x = 300
+        astpos.y = 575
+        ahB.x = 365;
+        ahB.y = 483;
+        ahB2.x = 395;
+        ahB2.x = 545;
+        ahB3.x = 368;
+        ahB3.y = 631;
+        ahB4.x = 290;
+        ahB4.y = 446;
+        ahB5.x = 290;
+        ahB5.y = 700;
+        ahB6.x = 215;
+        ahB6.y = 573;
         fill("white");
         if(foodStock<=2 && waterStock === 0){
             text("Sorry but your food and water stock is very low, too bad you're gonna have to restart the page",520,320)
@@ -275,7 +375,9 @@ function draw(){
 
     if(gameState === 1){
         background(bgG1);
+        canSeeShop.visible = false
         halp.visible = false
+        ground.visible = true
         coin.visible = false
         fill("white");
         textSize = 13;
@@ -425,6 +527,7 @@ function draw(){
 
     if(gameState === 2){
         rc.visible = false
+        canSeeShop.visible = false
         Shop.visible = false
         restartButton.visible = true;
         halp.visible = false
@@ -455,6 +558,7 @@ function draw(){
     if(gameState === 3){
         background("black");
         restartButton.visible = false
+        canSeeShop.visible = false
         startButton.visible = false
         rc.visible = false
         fm.visible = false
@@ -468,12 +572,13 @@ function draw(){
         ground.visible = false
         halp.visible = false
         
+        text(" "+coins,1460,40);
         fill("yellow");
         text("Upgrades = ",450,450);
         fill("white");
         text("Lazer "+lSVal,450,500);
         text("Food "+fSVal,450,550);
-        text("Water "+wsVal,450,600);
+        text("Water "+wSVal,450,600);
 
         coin.visible = true
         buyStuff();
@@ -691,17 +796,29 @@ function getSupplies(){
 }
 
 function buyStuff(){
+    box1.visible = true
+    box2.visible = true
+    box3.visible = true
+    box4.visible = true
+    box5.visible = true
+    box6.visible = true
+    box7.visible = true
+    box8.visible = true
+    box9.visible = true
+    box10.visible = true
+    box11.visible = true
+    box12.visible = true
+
+    buy1.visible = true
+    buy2.visible = true
+    buy3.visible = true
+
+    CoinBuyStuff1.visible = true
+    CoinBuyStuff2.visible = true
+    CoinBuyStuff3.visible = true
+
+    goBack.visible = true
     //Pt1
-    box1 = createSprite(100,150,10,126);
-    box1.shapeColor = "white";
-    box2 = createSprite(250,92,300,10);
-    box2.shapeColor = "white";
-    box3 = createSprite(250,208,300,10);
-    box3.shapeColor = "white";
-    box4 = createSprite(400,150,10,126);
-    box4.shapeColor = "white";
-    buy1 = createSprite(367,150,50,100);
-    buy1.shapeColor = "green";
     if(mousePressedOver(buy1) && coins === 50 && lSVal<7){
         coins = coins-50; 
         lSVal = lSVal+1
@@ -709,14 +826,8 @@ function buyStuff(){
     if(mousePressedOver(buy1) && coins<50){
         text("Try purchasing this once you have more money",125,250);
     }
-    CoinBuyStuff1 = createSprite(250,115,10,10);
-    CoinBuyStuff1.addImage(coinImage);
-    CoinBuyStuff1.scale = 0.1;
     
-    CoinLeft = createSprite(1450,35,5,5);
-    CoinLeft.addImage(coinImage);
-    CoinLeft.scale = 0.1
-    text(" "+coins,1460,40);
+    coins.visible = true
 
     fill("pink");
     text("Lazer Speed",115,120);
@@ -727,21 +838,6 @@ function buyStuff(){
     text("Price =       50 coins",200,120);
 
     //Pt2
-    box1 = createSprite(600,150,10,126);
-    box1.shapeColor = "white";
-    box2 = createSprite(750,92,300,10);
-    box2.shapeColor = "white";
-    box3 = createSprite(750,208,300,10);
-    box3.shapeColor = "white";
-    box4 = createSprite(900,150,10,126);
-    box4.shapeColor = "white";
-    buy2 = createSprite(867,150,50,100);
-    buy2.shapeColor = "green";
-
-    CoinBuyStuff1 = createSprite(750,115,10,10);
-    CoinBuyStuff1.addImage(coinImage);
-    CoinBuyStuff1.scale = 0.1;
-
     if(mousePressedOver(buy2) && coins === 100 && fSVal<7){
         coins = coins-100; 
         fSVal = fSVal+1
@@ -757,6 +853,28 @@ function buyStuff(){
     text("food has never been easier!",615,180);
     fill("white")
     text("Price =       100 coins",700,120);
+
+    //Pt3
+    if(mousePressedOver(buy3) && coins === 100 && wSVal<7){
+        coins = coins-100; 
+        wSVal = wSVal+1
+    }
+    if(mousePressedOver(buy3) && coins<100){
+        text("Try purchasing this once you have more money",1125,250);
+    }
+
+    fill("blue");
+    text("Water Speed",1115,120);
+    fill("lightblue")
+    text("Reduces the water's speed, collecting",1115,150);
+    text("water has never been easier!",1115,180);
+    fill("white")
+    text("Price =       100 coins",1200,120);
+
+    //hide once back is pressed
+    if(mousePressedOver(goBack) && gameState === 3){
+        gameState = 0
+    }
 }
 
 function youreDead(){
@@ -953,5 +1071,5 @@ function preventOverMovement(){
     }
     if(ahB6.x>=1536){
         ahB6.x = 1536;
-    }
+    }   
 }
