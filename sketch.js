@@ -31,9 +31,11 @@ var lSVal = 0;
 var fSVal = 0;
 var wSVal = 0;
 var dailyQuest;
-var Quest;
+var Quest,QuestButton,questImage,canSeeQuestButton;
+var questBox1,questBox2,questBox3,questBox4,dailyQuestBox1,dailyQuestBox2,dailyQuestBox3,dailyQuestBox4;
+var acceptQuest,denyQuest,acceptQuest2,denyQuest2;
 var goBack,goBackImage;
-var halp,helpImage;
+var halp,helpImage,canSeeHelp;
 var halpval = 0;
 var box1,box2,box3,box4,box5,box6,box7,box8,box9,box10,box11,box12;
 var CoinBuyStuff1,CoinBuyStuff2,CoinBuyStuff3;
@@ -66,6 +68,7 @@ function preload(){
     goBackImage = loadImage("images/goBak.png");
     helpImage = loadImage("images/HelpButtonImage.png");
     ShopImage = loadImage("images/MarketPlaceImage.png");
+    questImage = loadImage("images/QuestButtonImage.png")
 }
 
 
@@ -135,6 +138,8 @@ function setup(){
     restartButton = createSprite(768,361,50,50);
     rSt = createSprite(1525,10,25,25);
 
+    canSeeHelp = createSprite(250,25,50,50);
+    canSeeHelp.shapeColor = "white";
     halp = createSprite(250,25,50,50);
     halp.addImage(helpImage);
     halp.scale = 0.1;
@@ -193,6 +198,44 @@ function setup(){
     goBack.addImage(goBackImage);
     goBack.scale = 0.15
 
+    canSeeQuestButton = createSprite(25,100,50,50);
+    canSeeQuestButton.shapeColor = "white";
+    QuestButton = createSprite(25,100,50,50);
+    QuestButton.shapeColor = "white";
+    QuestButton.addImage(questImage);
+    QuestButton.scale = 0.1
+    
+    questBox1 = createSprite(150,250,10,300);
+    questBox1.shapeColor = "white";
+    questBox2 = createSprite(445,100,600,10);
+    questBox2.shapeColor = "white";
+    questBox3 = createSprite(740,245,10,300);
+    questBox3.shapeColor = "white";
+    questBox4 = createSprite(445,400,600,10);
+    questBox4.shapeColor = "white";
+
+    dailyQuestBox1 = createSprite(800,520,10,300);
+    dailyQuestBox1.shapeColor = "white";
+    dailyQuestBox2 = createSprite(1095,375,600,10);
+    dailyQuestBox2.shapeColor = "white";
+    dailyQuestBox3 = createSprite(1390,520,10,300);
+    dailyQuestBox3.shapeColor = "white";
+    dailyQuestBox4 = createSprite(1095,675,600,10);
+    dailyQuestBox4.shapeColor = "white";
+    
+    acceptQuest = createSprite(150,200000,10,200);
+    acceptQuest.shapeColor = "green";
+    acceptQuest2 = createSprite(150,200000,10,200);
+    acceptQuest2.shapeColor = "green";
+
+    denyQuest = createSprite(150,200000,10,200);
+    denyQuest.shapeColor = "red";
+    denyQuest2 = createSprite(150,20000,10,200);
+    denyQuest2.shapeColor = "red";
+
+
+
+
     Shop.visible = false
     lG = new Group();
     foodGroup = new Group();
@@ -218,6 +261,22 @@ function draw(){
         box10.visible = false
         box11.visible = false
         box12.visible = false
+        canSeeHelp.visible = true
+        QuestButton.visible = true
+        canSeeQuestButton.visible = true
+
+        questBox1.visible = false
+        questBox2.visible = false
+        questBox3.visible = false
+        questBox4.visible = false
+        dailyQuestBox1.visible = false
+        dailyQuestBox2.visible = false
+        dailyQuestBox3.visible = false
+        dailyQuestBox4.visible = false
+        acceptQuest.visible = false
+        acceptQuest2.visible = false
+        denyQuest.visible = false
+        denyQuest2.visible = false
 
         rc.visible = true
 
@@ -368,6 +427,9 @@ function draw(){
             window.open("https://shansharma08.github.io/-SelfDesignedGame-SpaceRunner_Help/");
             halpval = halpval+1
         }
+        if(mousePressedOver(QuestButton)){
+            gameState = 4;
+        }
         sB();
     }
 
@@ -379,6 +441,23 @@ function draw(){
         halp.visible = false
         ground.visible = true
         coin.visible = false
+        canSeeHelp.visible = false
+        QuestButton.visible = false
+        canSeeQuestButton.visible = false
+
+        questBox1.visible = false
+        questBox2.visible = false
+        questBox3.visible = false
+        questBox4.visible = false
+        dailyQuestBox1.visible = false
+        dailyQuestBox2.visible = false
+        dailyQuestBox3.visible = false
+        dailyQuestBox4.visible = false
+        acceptQuest.visible = false
+        acceptQuest2.visible = false
+        denyQuest.visible = false
+        denyQuest2.visible = false
+
         fill("white");
         textSize = 13;
         text("Score : "+score,1387,30);
@@ -531,6 +610,9 @@ function draw(){
         Shop.visible = false
         restartButton.visible = true;
         halp.visible = false
+        canSeeHelp.visible = false
+        QuestButton.visible = false
+        canSeeQuestButton.visible = false
         lG.setVelocityXEach(0);
         foodGroup.destroyEach();
         waterGroup.destroyEach();
@@ -560,6 +642,9 @@ function draw(){
         restartButton.visible = false
         canSeeShop.visible = false
         startButton.visible = false
+        canSeeHelp.visible = false
+        QuestButton.visible = false
+        canSeeQuestButton.visible = false
         rc.visible = false
         fm.visible = false
         fl.visible = false
@@ -571,6 +656,19 @@ function draw(){
         Shop.visible = false
         ground.visible = false
         halp.visible = false
+
+        questBox1.visible = false
+        questBox2.visible = false
+        questBox3.visible = false
+        questBox4.visible = false
+        dailyQuestBox1.visible = false
+        dailyQuestBox2.visible = false
+        dailyQuestBox3.visible = false
+        dailyQuestBox4.visible = false
+        acceptQuest.visible = false
+        acceptQuest2.visible = false
+        denyQuest.visible = false
+        denyQuest2.visible = false
         
         text(" "+coins,1460,40);
         fill("yellow");
@@ -582,6 +680,58 @@ function draw(){
 
         coin.visible = true
         buyStuff();
+    }
+
+    if(gameState === 4){
+        background("black");
+        restartButton.visible = false
+        canSeeShop.visible = false
+        startButton.visible = false
+        canSeeHelp.visible = false
+        QuestButton.visible = false
+        canSeeQuestButton.visible = false
+        coin.visible = false
+        rc.visible = false
+        fm.visible = false
+        fl.visible = false
+        w5.visible = false
+        w4.visible = false
+        w3.visible = false
+        w2.visible = false
+        w1.visible = false
+        Shop.visible = false
+        ground.visible = false
+        halp.visible = false
+        goBack.visible = true
+
+        questBox1.visible = true
+        questBox2.visible = true
+        questBox3.visible = true
+        questBox4.visible = true
+        dailyQuestBox1.visible = true
+        dailyQuestBox2.visible = true
+        dailyQuestBox3.visible = true
+        dailyQuestBox4.visible = true
+        acceptQuest.visible = true
+        acceptQuest2.visible = true
+        denyQuest.visible = true
+        denyQuest2.visible = true
+
+        astpos.x = 2000;
+        astpos.y = 2000;
+
+        if(mousePressedOver(goBack)){
+            gameState = 0
+        }
+
+        fill("white")
+        text("Daily quest every 6:30am GMT",670,50);
+        text("More quests in development",678,70);
+        text("<- QUEST",800,250);
+        text("DAILY QUEST ->",650,500)
+
+        text("IN DEVELOPMENT",1000,500);
+        text("IN DEVELOPMENT",400,300);
     }
     
     
@@ -685,28 +835,28 @@ function getSupplies(){
             }
         }
         else if(randX === 2){
-            if(fsVal === 0){
+            if(fSVal === 0){
                 fotw.veloctyX = 13;
             }
-            if(fsVal === 1){
+            if(fSVal === 1){
                 fotw.veloctyX = 12;
             }
-            if(fsVal === 2){
+            if(fSVal === 2){
                 fotw.veloctyX = 11;
             }
-            if(fsVal === 3){
+            if(fSVal === 3){
                 fotw.veloctyX = 10;
             }
-            if(fsVal === 4){
+            if(fSVal === 4){
                 fotw.veloctyX = 9;
             }
-            if(fsVal === 5){
+            if(fSVal === 5){
                 fotw.veloctyX = 8;
             }
-            if(fsVal === 6){
+            if(fSVal === 6){
                 fotw.veloctyX = 7;
             }
-            if(fsVal === 7){
+            if(fSVal === 7){
                 fotw.veloctyX = 6;
             }
         }
@@ -714,28 +864,28 @@ function getSupplies(){
             fotw.velocityX = 0;
         }
         if(randY === 1){
-            if(fsVal === 0){
+            if(fSVal === 0){
                 fotw.velocityY = -13;
             }
-            if(fsVal === 1){
+            if(fSVal === 1){
                 fotw.velocityY = -12;
             }
-            if(fsVal === 2){
+            if(fSVal === 2){
                 fotw.velocityY = -11;
             }
-            if(fsVal === 3){
+            if(fSVal === 3){
                 fotw.velocityY = -10;
             }
-            if(fsVal === 4){
+            if(fSVal === 4){
                 fotw.velocityY = -9;
             }
-            if(fsVal === 5){
+            if(fSVal === 5){
                 fotw.velocityY = -8;
             }
-            if(fsVal === 6){
+            if(fSVal === 6){
                 fotw.velocityY = -7;
             }
-            if(fsVal === 7){
+            if(fSVal === 7){
                 fotw.velocityY = -6;
             }
         }
@@ -829,9 +979,9 @@ function buyStuff(){
     
     coins.visible = true
 
-    fill("pink");
+    fill("red");
     text("Lazer Speed",115,120);
-    fill("yellow")
+    fill("pink")
     text("Reduces the lazer's speed, making",115,150);
     text("the game much more easier!",115,180);
     fill("white")
