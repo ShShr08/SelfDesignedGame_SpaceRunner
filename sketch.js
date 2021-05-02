@@ -24,7 +24,7 @@ var waterGroup;
 var restartButton;
 var emI;
 var dRG;
-var coins = 50,coinImage,coin;
+var coins = 50,coinImage,coin,maxCoinMulti = 0;
 var gems = 0,gemImage;
 var Shop,ShopImage,canSeeShop;
 var lSVal = 0;
@@ -38,9 +38,9 @@ var resetQuest,resetDailyQuest,dropQuest,dropDailyQuest,questCompleted = false,d
 var goBack,goBackImage;
 var halp,helpImage,canSeeHelp;
 var halpval = 0;
-var box1,box2,box3,box4,box5,box6,box7,box8,box9,box10,box11,box12;
-var CoinBuyStuff1,CoinBuyStuff2,CoinBuyStuff3;
-var buy1,buy2,buy3;
+var box1,box2,box3,box4,box5,box6,box7,box8,box9,box10,box11,box12,box13,box14,box15,box16;
+var CoinBuyStuff1,CoinBuyStuff2,CoinBuyStuff3,CoinBuyStuff4;
+var buy1,buy2,buy3,buy4;
 var boss,bossImage,bossBackground,transferToBoss;
 
 const Engine = Matter.Engine;
@@ -198,6 +198,20 @@ function setup(){
     CoinBuyStuff3.addImage(coinImage);
     CoinBuyStuff3.scale = 0.1;
 
+    box13 = createSprite(100,350,10,126);
+    box13.shapeColor = "white";
+    box14 = createSprite(250,292,300,10);
+    box14.shapeColor = "white";
+    box15 = createSprite(250,408,300,10);
+    box15.shapeColor = "white";
+    box16 = createSprite(400,350,10,126);
+    box16.shapeColor = "white";
+    buy4 = createSprite(367,350,50,100);
+    buy4.shapeColor = "green";
+    CoinBuyStuff4 = createSprite(250,315,10,10);
+    CoinBuyStuff4.addImage(coinImage);
+    CoinBuyStuff4.scale = 0.1;
+
     goBack = createSprite(30,692,20,20);
     goBack.addImage(goBackImage);
     goBack.scale = 0.15
@@ -275,6 +289,10 @@ function draw(){
         box10.visible = false
         box11.visible = false
         box12.visible = false
+        box13.visible = false
+        box14.visible = false
+        box15.visible = false
+        box16.visible = false
         canSeeHelp.visible = true
         QuestButton.visible = true
         canSeeQuestButton.visible = true
@@ -298,10 +316,12 @@ function draw(){
         buy1.visible = false
         buy2.visible = false
         buy3.visible = false
+        buy4.visible = false
 
         CoinBuyStuff1.visible = false
         CoinBuyStuff2.visible = false
         CoinBuyStuff3.visible = false
+        CoinBuyStuff4.visible = false
 
         goBack.visible = false
 
@@ -541,7 +561,13 @@ function draw(){
 
         Shop.visible = false
         restartButton.visible = false
-        score = score+1;
+        if(maxCoinMulti === 0){
+            score = score+1;  
+        }
+        if(maxCoinMulti === 1){
+            score = score+2;  
+        }
+        
         highScore = score
         if(keyDown('w')){
             astpos.y = astpos.y -10;
@@ -1094,14 +1120,20 @@ function buyStuff(){
     box10.visible = true
     box11.visible = true
     box12.visible = true
+    box13.visible = true
+    box14.visible = true
+    box15.visible = true
+    box16.visible = true
 
     buy1.visible = true
     buy2.visible = true
     buy3.visible = true
+    buy4.visible = true
 
     CoinBuyStuff1.visible = true
     CoinBuyStuff2.visible = true
     CoinBuyStuff3.visible = true
+    CoinBuyStuff4.visible = true
 
     goBack.visible = true
     //Pt1
@@ -1109,8 +1141,11 @@ function buyStuff(){
         coins = coins-50; 
         lSVal = lSVal+1
     }
-    if(mousePressedOver(buy1) && coins<50){
+    if(mousePressedOver(buy1) && coins<50 && lSVal <7){
         text("Try purchasing this once you have more money",125,250);
+    }
+    if(mousePressedOver(buy1) && lSVal === 7){
+        text("You have purchased the maximum you can!",130,250);
     }
     
     coin.visible = true
@@ -1128,8 +1163,11 @@ function buyStuff(){
         coins = coins-100; 
         fSVal = fSVal+1
     }
-    if(mousePressedOver(buy2) && coins<100){
+    if(mousePressedOver(buy2) && coins<100 && fSVal<7){
         text("Try purchasing this once you have more money",625,250);
+    }
+    if(mousePressedOver(buy2) && fSVal === 7){
+        text("You have purchased the maximum you can!",630,250);
     }
 
     fill("orange");
@@ -1145,8 +1183,11 @@ function buyStuff(){
         coins = coins-100; 
         wSVal = wSVal+1
     }
-    if(mousePressedOver(buy3) && coins<100){
+    if(mousePressedOver(buy3) && coins<100 && wSVal<7){
         text("Try purchasing this once you have more money",1125,250);
+    }
+    if(mousePressedOver(buy3) && wSVal === 7){
+        text("You have purchased the maximum you can!",1130,250);
     }
 
     fill("blue");
@@ -1154,10 +1195,28 @@ function buyStuff(){
     fill("lightblue")
     text("Reduces the water's speed, collecting",1115,150);
     text("water has never been easier!",1115,180);
-    fill("white")
+    fill("white");
     text("Price =       100 coins",1200,120);
 
-    //hide once back is pressed
+    //Pt4
+    fill("yellow");
+    text("Double Score!",115,320);
+    fill("yellow")
+    text("Doubles your score, this has",115,350);
+    text("positive and negative results!",115,380);
+    fill("white")
+    text("Price =       1000 coins",200,320);
+
+    if(mousePressedOver(buy4) && coins>=1000 && maxCoinMulti === 0){
+        coins = coins-1000; 
+        maxCoinMulti = maxCoinMulti+1
+    }
+    if(mousePressedOver(buy4) && maxCoinMulti === 1){
+        text("You have purchased the maximum you can",130,450);
+    }
+
+
+    //go back to gameState 0
     if(mousePressedOver(goBack) && gameState === 3){
         gameState = 0
     }
