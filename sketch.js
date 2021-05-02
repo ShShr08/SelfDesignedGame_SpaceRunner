@@ -17,7 +17,7 @@ var rI;
 var w1,w2,w3,w4,w5,wI1,wI2,wI3,wI4,wI5;
 var fm,fl,fmI,flI;
 var rSt;
-var score = 0;
+var score = 0,highScore = 0;
 var randX,randY;
 var foodGroup;
 var waterGroup;
@@ -32,14 +32,16 @@ var fSVal = 0;
 var wSVal = 0;
 var dailyQuest;
 var Quest,QuestButton,questImage,canSeeQuestButton;
-var questBox1,questBox2,questBox3,questBox4,dailyQuestBox1,dailyQuestBox2,dailyQuestBox3,dailyQuestBox4;
-var acceptQuest,denyQuest,acceptQuest2,denyQuest2;
+var questBox1,questBox2,questBox3,questBox4,dailyQuestBox1,dailyQuestBox2,dailyQuestBox3,dailyQuestBox4,randomQuest = 0,randomDailyQuest = 0;
+var acceptQuest,denyQuest,acceptQuest2,denyQuest2,questActive = false,dailyQuestActive = false;
+var resetQuest,resetDailyQuest,dropQuest,dropDailyQuest,questCompleted = false,dailyQuestCompleted = true,collectQReward,collectDQreward;
 var goBack,goBackImage;
 var halp,helpImage,canSeeHelp;
 var halpval = 0;
 var box1,box2,box3,box4,box5,box6,box7,box8,box9,box10,box11,box12;
 var CoinBuyStuff1,CoinBuyStuff2,CoinBuyStuff3;
-var buy1,buy2,buy3
+var buy1,buy2,buy3;
+var boss,bossImage,bossBackground,transferToBoss;
 
 const Engine = Matter.Engine;
 const World = Matter.World;
@@ -68,7 +70,9 @@ function preload(){
     goBackImage = loadImage("images/goBak.png");
     helpImage = loadImage("images/HelpButtonImage.png");
     ShopImage = loadImage("images/MarketPlaceImage.png");
-    questImage = loadImage("images/QuestButtonImage.png")
+    questImage = loadImage("images/QuestButtonImage.png");
+    bossImage = loadImage("images/SpaceBoss.png");
+    bossBackground = loadImage("images/BossBackgroundImage.png")
 }
 
 
@@ -223,18 +227,25 @@ function setup(){
     dailyQuestBox4 = createSprite(1095,675,600,10);
     dailyQuestBox4.shapeColor = "white";
     
-    acceptQuest = createSprite(150,200000,10,200);
+    acceptQuest = createSprite(400,250,75,50);
     acceptQuest.shapeColor = "green";
-    acceptQuest2 = createSprite(150,200000,10,200);
+    acceptQuest2 = createSprite(500,9999,75,50);
     acceptQuest2.shapeColor = "green";
 
-    denyQuest = createSprite(150,200000,10,200);
+    denyQuest = createSprite(500,250,75,50);
     denyQuest.shapeColor = "red";
     denyQuest2 = createSprite(150,20000,10,200);
     denyQuest2.shapeColor = "red";
 
+    collectQReward = createSprite(400,250,100,50);
+    collectQReward.shapeColor = "yellow";
+    dropQuest = createSprite(450,300,100,50);
+    dropQuest.shapeColor = "red";
 
-
+    boss = createSprite(1200,400,200,400);
+    boss.addImage(bossImage);
+    transferToBoss = createSprite(153,361,5,1536);
+    transferToBoss.shapeColor = "red";
 
     Shop.visible = false
     lG = new Group();
@@ -248,7 +259,10 @@ function draw(){
         background(bgG0);
         ground.visible = true
         canSeeShop.visible = true
+        boss.visible = false
         coin.visible = true
+        collectQReward.visible = false
+        dropQuest.visible = false
         box1.visible = false
         box2.visible = false
         box3.visible = false
@@ -264,7 +278,8 @@ function draw(){
         canSeeHelp.visible = true
         QuestButton.visible = true
         canSeeQuestButton.visible = true
-
+          
+        transferToBoss.visible = false
         questBox1.visible = false
         questBox2.visible = false
         questBox3.visible = false
@@ -305,14 +320,14 @@ function draw(){
         ahB6.x = 215;
         ahB6.y = 573;
         fill("white");
-        if(foodStock<=2 && waterStock === 0){
+        text("Highscore = "+highScore,1300,40)
+        if(foodStock<=2 || waterStock === 0 ){
             text("Sorry but your food and water stock is very low, too bad you're gonna have to restart the page",520,320)
         }
         if(foodStock>2 && waterStock!= 0){
             text("Click here to start playing",700,320);
         }
         ahB.collide(ground);
-        rSt.visible = true
         restartButton.visible = false
         text(" "+coins,1460,40);
         if(foodStock >8 || foodStock ===8){
@@ -427,6 +442,8 @@ function draw(){
             window.open("https://shansharma08.github.io/-SelfDesignedGame-SpaceRunner_Help/");
             halpval = halpval+1
         }
+        fill("white")
+        text("<- Quests",75,105);
         if(mousePressedOver(QuestButton)){
             gameState = 4;
         }
@@ -438,18 +455,22 @@ function draw(){
     if(gameState === 1){
         background(bgG1);
         canSeeShop.visible = false
+        transferToBoss.visible = false
         halp.visible = false
         ground.visible = true
         coin.visible = false
         canSeeHelp.visible = false
         QuestButton.visible = false
         canSeeQuestButton.visible = false
-
+        boss.visible = false
+          
         questBox1.visible = false
         questBox2.visible = false
+        dropQuest.visible = false
         questBox3.visible = false
         questBox4.visible = false
         dailyQuestBox1.visible = false
+        collectQReward.visible = false
         dailyQuestBox2.visible = false
         dailyQuestBox3.visible = false
         dailyQuestBox4.visible = false
@@ -521,6 +542,7 @@ function draw(){
         Shop.visible = false
         restartButton.visible = false
         score = score+1;
+        highScore = score
         if(keyDown('w')){
             astpos.y = astpos.y -10;
             ahB.y = ahB.y-10;
@@ -582,6 +604,10 @@ function draw(){
         fm.visible = false
         fl.visible = false
         rc.visible = false
+
+        if(foodStock<=2 || waterStock === 0 ){
+            gameState =0
+        }
         
         for(i=0;i<waterGroup.length;i++){
             if(mousePressedOver(waterGroup[i])){
@@ -605,14 +631,19 @@ function draw(){
 
 
     if(gameState === 2){
+        dropQuest.visible = false
         rc.visible = false
         canSeeShop.visible = false
+          
         Shop.visible = false
+        transferToBoss.visible = false
         restartButton.visible = true;
+        collectQReward.visible = false
         halp.visible = false
         canSeeHelp.visible = false
         QuestButton.visible = false
         canSeeQuestButton.visible = false
+        boss.visible = false
         lG.setVelocityXEach(0);
         foodGroup.destroyEach();
         waterGroup.destroyEach();
@@ -639,12 +670,15 @@ function draw(){
 
     if(gameState === 3){
         background("black");
+        dropQuest.visible = false
         restartButton.visible = false
         canSeeShop.visible = false
         startButton.visible = false
         canSeeHelp.visible = false
         QuestButton.visible = false
         canSeeQuestButton.visible = false
+          
+        boss.visible = false
         rc.visible = false
         fm.visible = false
         fl.visible = false
@@ -655,11 +689,13 @@ function draw(){
         w1.visible = false
         Shop.visible = false
         ground.visible = false
+        transferToBoss.visible = false
         halp.visible = false
 
         questBox1.visible = false
         questBox2.visible = false
         questBox3.visible = false
+        collectQReward.visible = false
         questBox4.visible = false
         dailyQuestBox1.visible = false
         dailyQuestBox2.visible = false
@@ -670,6 +706,7 @@ function draw(){
         denyQuest.visible = false
         denyQuest2.visible = false
         
+        fill("white")
         text(" "+coins,1460,40);
         fill("yellow");
         text("Upgrades = ",450,450);
@@ -690,6 +727,10 @@ function draw(){
         canSeeHelp.visible = false
         QuestButton.visible = false
         canSeeQuestButton.visible = false
+        transferToBoss.visible = false
+        collectQReward.visible = false
+          
+        boss.visible = false
         coin.visible = false
         rc.visible = false
         fm.visible = false
@@ -712,10 +753,12 @@ function draw(){
         dailyQuestBox2.visible = true
         dailyQuestBox3.visible = true
         dailyQuestBox4.visible = true
-        acceptQuest.visible = true
+        acceptQuest.visible = false
         acceptQuest2.visible = true
-        denyQuest.visible = true
+        denyQuest.visible = false
         denyQuest2.visible = true
+        dropQuest.visible = false
+        collectQReward.visible = false
 
         astpos.x = 2000;
         astpos.y = 2000;
@@ -724,14 +767,98 @@ function draw(){
             gameState = 0
         }
 
+        if(questActive === false && randomQuest === 0){
+            randomQuest = 1 //Math.round(random(1,3));
+        }
+
+        //this is for daily randomQuest = 1
+        if(randomQuest === 1 && questActive === false){
+            fill("white");
+            text("Get a score of 1000 in a single try",350,150);
+            fill("lightgreen")
+            text("Difficulty: Easy : You shouldn't have much of a difficulty in completing this",260,200);
+            fill("green");
+            text("Accept?",375,250);
+            fill("red");
+            text("Deny?",480,250);
+            fill("yellow");
+            text("Reward:100 coins",400,300);
+            
+            if(mousePressedOver(acceptQuest) && questActive === false){
+                questActive = true
+            }
+        }
+        if(questActive === true && randomQuest === 1){
+            fill("green");
+            text("Ongoing quest",410,150);
+            fill("white")
+            text("Get a score of 1000 in a single try",360,200);
+            fill("lightgreen");
+            text("Difficulty: Easy : You shouldn't have much of a difficulty in completing this",260,250);
+            fill("red")
+            text("Drop quest? (pay 25 coins)",375,300);
+            if(mousePressedOver(dropQuest) && coins>=25){
+                coins = coins-25;
+                randomQuest = 0;
+                questActive = false;
+            }
+            if(highScore>=1000){
+                questActive = false
+                questCompleted = true
+            }
+        }
+        if(questActive === false && questCompleted === true && randomQuest === 1){
+            fill("green")
+            text("Quest Completed!",410,150);
+            fill("white")
+            text("Get a score of 100 in a single try",360,200);
+            fill("lightgreen")
+            text("Collect Your reward here",400,250);
+            if(mousePressedOver(collectQReward)){
+                coins = coins+100;
+                questActive = false;
+                questCompleted = false;
+                randomQuest = 0
+            }
+        }
+
         fill("white")
         text("Daily quest every 6:30am GMT",670,50);
         text("More quests in development",678,70);
         text("<- QUEST",800,250);
         text("DAILY QUEST ->",650,500)
+    }
+    
+    if(gameState === 5){
+        background(bossBackground);
+        boss.visible = true
+        canSeeShop.visible = false
+        transferToBoss.visible = true
+        halp.visible = false
+        ground.visible = true
+        coin.visible = false
+        canSeeHelp.visible = false
+        QuestButton.visible = false
+        canSeeQuestButton.visible = false
+          
+        questBox1.visible = false
+        questBox2.visible = false
+        questBox3.visible = false
+        questBox4.visible = false
+        dailyQuestBox1.visible = false
+        dailyQuestBox2.visible = false
+        dailyQuestBox3.visible = false
+        dailyQuestBox4.visible = false
+        acceptQuest.visible = false
+        acceptQuest2.visible = false
+        denyQuest.visible = false
+        denyQuest2.visible = false
+        
+        if(transferToBoss.x>-20){
+            transferToBoss.velocityX = -150
+        }
 
-        text("IN DEVELOPMENT",1000,500);
-        text("IN DEVELOPMENT",400,300);
+        theBossCanFightLol();
     }
     
     
@@ -742,14 +869,23 @@ function draw(){
         waterStock = waterStock-1;
     }
     if(mousePressedOver(rSt)){
-        foodStock + 5;
-        waterStock + 2;
-        //console.log(hour());
+        foodStock = foodStock+5;
+        waterStock = waterStock+2;
+        console.log(hour());
     }
+    if(foodStock>10){
+        foodStock = 10
+    }
+    if(waterStock>5){
+        waterStock = 5
+    }
+    if(score%5000 === 0 && gameState === 1){
+        gameState = 5
+    }
+    rSt.visible = false
     rDT = Math.random(round(1,4));
     randX = Math.round(random(1,3));
-    randY = Math.round(random(1,3))
-    rand = Math.round(random(1,3));
+    randY = Math.round(random(1,3));
     drawSprites();
     ast.display();
     //console.log(rand);
@@ -969,7 +1105,7 @@ function buyStuff(){
 
     goBack.visible = true
     //Pt1
-    if(mousePressedOver(buy1) && coins === 50 && lSVal<7){
+    if(mousePressedOver(buy1) && coins>=50 && lSVal<7){
         coins = coins-50; 
         lSVal = lSVal+1
     }
@@ -977,7 +1113,7 @@ function buyStuff(){
         text("Try purchasing this once you have more money",125,250);
     }
     
-    coins.visible = true
+    coin.visible = true
 
     fill("red");
     text("Lazer Speed",115,120);
@@ -988,7 +1124,7 @@ function buyStuff(){
     text("Price =       50 coins",200,120);
 
     //Pt2
-    if(mousePressedOver(buy2) && coins === 100 && fSVal<7){
+    if(mousePressedOver(buy2) && coins>=100 && fSVal<7){
         coins = coins-100; 
         fSVal = fSVal+1
     }
@@ -1005,7 +1141,7 @@ function buyStuff(){
     text("Price =       100 coins",700,120);
 
     //Pt3
-    if(mousePressedOver(buy3) && coins === 100 && wSVal<7){
+    if(mousePressedOver(buy3) && coins>=100 && wSVal<7){
         coins = coins-100; 
         wSVal = wSVal+1
     }
@@ -1028,106 +1164,109 @@ function buyStuff(){
 }
 
 function youreDead(){
-    if(rand === 1){
-        if(score%1000 === 0){
-            eM = createSprite(20,150,10,10);
-            eM.addImage(emI);
-            eM.scale = 0.2;
-            eM.lifetime = 60;
-            eM2 = createSprite(1516,150,10,10);
-            eM2.addImage(emI);
-            eM2.scale = 0.2;
-            eM2.lifetime = 60;
-            eM3 = createSprite(20,450,10,10);
-            eM3.addImage(emI);
-            eM3.scale = 0.2;
-            eM3.lifetime = 60;
-            eM4 = createSprite(1516,450,10,10);
-            eM4.addImage(emI);
-            eM4.scale = 0.2;
-            eM4.lifetime = 60;
+    if(score%200 === 0){
+            rand = Math.round(random(1,3))
+        if(rand === 1){
+            if(score%1000 === 0){
+                eM = createSprite(20,150,10,10);
+                eM.addImage(emI);
+                eM.scale = 0.2;
+                eM.lifetime = 60;
+                eM2 = createSprite(1516,150,10,10);
+                eM2.addImage(emI);
+                eM2.scale = 0.2;
+                eM2.lifetime = 60;
+                eM3 = createSprite(20,450,10,10);
+                eM3.addImage(emI);
+                eM3.scale = 0.2;
+                eM3.lifetime = 60;
+                eM4 = createSprite(1516,450,10,10);
+                eM4.addImage(emI);
+                eM4.scale = 0.2;
+                eM4.lifetime = 60;
+            }
+            if(score%1050 === 0){
+                dR = createSprite(768,150,1536,5);
+                dR.shapeColor = "red";
+                dR.lifetime = 100;
+                dR2 = createSprite(768,450,1536,5);
+                dR2.shapeColor = "red";
+                dR2.lifetime = 100;
+                dRG.add(dR);
+                dRG.add(dR2);
+            }
         }
-        if(score%1050 === 0){
-            dR = createSprite(768,150,1536,5);
-            dR.shapeColor = "red";
-            dR.lifetime = 100;
-            dR2 = createSprite(768,450,1536,5);
-            dR2.shapeColor = "red";
-            dR2.lifetime = 100;
-            dRG.add(dR);
-            dRG.add(dR2);
+        if(rand === 2){
+            if(score%500 === 0){
+                eM = createSprite(384,20,10,10);
+                eM.addImage(emI);
+                eM.scale = 0.2;
+                eM.lifetime = 60;
+                eM2 = createSprite(384,702,10,10);
+                eM2.addImage(emI);
+                eM2.scale = 0.2;
+                eM2.lifetime = 60;
+                eM3 = createSprite(768,20,10,10);
+                eM3.addImage(emI);
+                eM3.scale = 0.2;
+                eM3.lifetime = 60;
+                eM4 = createSprite(768,702,10,10);
+                eM4.addImage(emI);
+                eM4.scale = 0.2;
+                eM4.lifetime = 60;
+                eM5 = createSprite(1152,20,10,10);
+                eM5.addImage(emI);
+                eM5.scale = 0.2;
+                eM5.lifetime = 60;
+                eM6 = createSprite(1152,702,10,10);
+                eM6.addImage(emI);
+                eM6.scale = 0.2;
+                eM6.lifetime = 60;
+            }
+            if(score%550 === 0){
+                dR = createSprite(384,361,5,722);
+                dR.shapeColor = "red";
+                dR.lifetime = 100;
+                dR2 = createSprite(768,361,5,722);
+                dR2.shapeColor = "red";
+                dR2.lifetime = 100;
+                dR3 = createSprite(1152,361,5,722);
+                dR3.shapeColor = "red";
+                dR3.lifetime = 100;
+                dRG.add(dR);
+                dRG.add(dR2);
+                dRG.add(dR3);
+            }
         }
-    }
-    if(rand === 2){
-        if(score%500 === 0){
-            eM = createSprite(384,20,10,10);
-            eM.addImage(emI);
-            eM.scale = 0.2;
-            eM.lifetime = 60;
-            eM2 = createSprite(384,702,10,10);
-            eM2.addImage(emI);
-            eM2.scale = 0.2;
-            eM2.lifetime = 60;
-            eM3 = createSprite(768,20,10,10);
-            eM3.addImage(emI);
-            eM3.scale = 0.2;
-            eM3.lifetime = 60;
-            eM4 = createSprite(768,702,10,10);
-            eM4.addImage(emI);
-            eM4.scale = 0.2;
-            eM4.lifetime = 60;
-            eM5 = createSprite(1152,20,10,10);
-            eM5.addImage(emI);
-            eM5.scale = 0.2;
-            eM5.lifetime = 60;
-            eM6 = createSprite(1152,702,10,10);
-            eM6.addImage(emI);
-            eM6.scale = 0.2;
-            eM6.lifetime = 60;
-        }
-        if(score%550 === 0){
-            dR = createSprite(384,361,5,722);
-            dR.shapeColor = "red";
-            dR.lifetime = 100;
-            dR2 = createSprite(768,361,5,722);
-            dR2.shapeColor = "red";
-            dR2.lifetime = 100;
-            dR3 = createSprite(1152,361,5,722);
-            dR3.shapeColor = "red";
-            dR3.lifetime = 100;
-            dRG.add(dR);
-            dRG.add(dR2);
-            dRG.add(dR3);
-        }
-    }
-    if(rand === 3){
-        if(score%1500 === 0){
-            eM = createSprite(768,20,10,10);
-            eM.addImage(emI);
-            eM.scale = 0.2;
-            eM.lifetime = 60;
-            eM2 = createSprite(768,702,10,10);
-            eM2.addImage(emI);
-            eM2.scale = 0.2;
-            eM2.lifetime = 60;
-            eM3 = createSprite(20,361,10,10);
-            eM3.addImage(emI);
-            eM3.scale = 0.2;
-            eM3.lifetime = 60;
-            eM4 = createSprite(1516,361,10,10);
-            eM4.addImage(emI);
-            eM4.scale = 0.2;
-            eM4.lifetime = 60;
-        }
-        if(score%1550 === 0){
-            dR = createSprite(768,361,1536,5);
-            dR.shapeColor = "red";
-            dR.lifetime = 100;
-            dR2 = createSprite(361,768,1536,5);
-            dR2.shapeColor = "red";
-            dR2.lifetime = 100;
-            dRG.add(dR);
-            dRG.add(dR2);
+        if(rand === 3){
+            if(score%1500 === 0){
+                eM = createSprite(768,20,10,10);
+                eM.addImage(emI);
+                eM.scale = 0.2;
+                eM.lifetime = 60;
+                eM2 = createSprite(768,702,10,10);
+                eM2.addImage(emI);
+                eM2.scale = 0.2;
+                eM2.lifetime = 60;
+                eM3 = createSprite(20,361,10,10);
+                eM3.addImage(emI);
+                eM3.scale = 0.2;
+                eM3.lifetime = 60;
+                eM4 = createSprite(1516,361,10,10);
+                eM4.addImage(emI);
+                eM4.scale = 0.2;
+                eM4.lifetime = 60;
+            }
+            if(score%1550 === 0){
+                dR = createSprite(768,361,1536,5);
+                dR.shapeColor = "red";
+                dR.lifetime = 100;
+                dR2 = createSprite(361,768,1536,5);
+                dR2.shapeColor = "red";
+                dR2.lifetime = 100;
+                dRG.add(dR);
+                dRG.add(dR2);
+            }
         }
     }
 }
@@ -1222,4 +1361,8 @@ function preventOverMovement(){
     if(ahB6.x>=1536){
         ahB6.x = 1536;
     }   
+}
+//being worked on
+function theBossCanFightLol(){
+    //lazer1 = createSprite
 }
