@@ -255,6 +255,9 @@ function setup(){
     collectQReward.shapeColor = "yellow";
     dropQuest = createSprite(450,300,100,50);
     dropQuest.shapeColor = "red";
+    
+    resetQuest = createSprite(450,350,200,50);
+    resetQuest.shapeColor = "yellow";
 
     boss = createSprite(1200,400,200,400);
     boss.addImage(bossImage);
@@ -296,6 +299,7 @@ function draw(){
         canSeeHelp.visible = true
         QuestButton.visible = true
         canSeeQuestButton.visible = true
+        resetQuest.visible = false
           
         transferToBoss.visible = false
         questBox1.visible = false
@@ -755,9 +759,10 @@ function draw(){
         canSeeQuestButton.visible = false
         transferToBoss.visible = false
         collectQReward.visible = false
+        resetQuest.visible = true
           
         boss.visible = false
-        coin.visible = false
+        coin.visible = true
         rc.visible = false
         fm.visible = false
         fl.visible = false
@@ -770,7 +775,7 @@ function draw(){
         ground.visible = false
         halp.visible = false
         goBack.visible = true
-
+        resetQuest.visible = false
         questBox1.visible = true
         questBox2.visible = true
         questBox3.visible = true
@@ -788,6 +793,9 @@ function draw(){
 
         astpos.x = 2000;
         astpos.y = 2000;
+
+        fill("white")
+        text(" "+coins,1460,40);
 
         if(mousePressedOver(goBack)){
             gameState = 0
@@ -809,6 +817,8 @@ function draw(){
             text("Deny?",480,250);
             fill("yellow");
             text("Reward:100 coins",400,300);
+            fill("white")
+            text("Reset Quest? 20 Coins",390,350);
             
             if(mousePressedOver(acceptQuest) && questActive === false){
                 questActive = true
@@ -822,7 +832,10 @@ function draw(){
             fill("lightgreen");
             text("Difficulty: Easy : You shouldn't have much of a difficulty in completing this",260,250);
             fill("red")
-            text("Drop quest? (pay 25 coins)",375,300);
+            text("Drop quest? (pay 20 coins)",375,300);
+            if(mousePressedOver(resetQuest) && coins>=20){
+                coins = coins-20;
+            }
             if(mousePressedOver(dropQuest) && coins>=25){
                 coins = coins-25;
                 randomQuest = 0;
@@ -837,7 +850,7 @@ function draw(){
             fill("green")
             text("Quest Completed!",410,150);
             fill("white")
-            text("Get a score of 100 in a single try",360,200);
+            text("Get a score of 1000 in a single try",360,200);
             fill("lightgreen")
             text("Collect Your reward here",400,250);
             if(mousePressedOver(collectQReward)){
@@ -847,6 +860,25 @@ function draw(){
                 randomQuest = 0
             }
         }
+
+        //This is for randomQuest === 2
+        if(randomQuest === 2 && questActive === false){
+            fill("white");
+            text("Get a score of 5000 in a single try",350,150);
+            fill("lightgreen")
+            text("Difficulty: Hard : Might be difficult in doing this quest",260,200);
+            fill("green");
+            text("Accept?",375,250);
+            fill("red");
+            text("Deny?",480,250);
+            fill("yellow");
+            text("Reward:550 coins",400,300);
+            
+            if(mousePressedOver(acceptQuest) && questActive === false){
+                questActive = true
+            }
+        }
+
 
         fill("white")
         text("Daily quest every 6:30am GMT",670,50);
