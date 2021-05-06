@@ -683,7 +683,7 @@ function draw(){
         lG.setVelocityXEach(0);
         foodGroup.destroyEach();
         waterGroup.destroyEach();
-        if(mousePressedOver(restartButton)){
+        if(mousePressedOver(restartButton && frameCount%5 === 0)){
             gameState = 0;
             score = 0;
         }
@@ -1112,7 +1112,7 @@ function spawnEnemy(){
 
 function sB(){
     if(foodStock >=2 && waterStock>=1){ 
-        if(mousePressedOver(startButton) && gameState === 0){
+        if(mousePressedOver(startButton) && gameState === 0 && frameCount%5 === 0){
             gameState = 1
         }
         if(gameState === 1 || gameState === 2){
