@@ -33,8 +33,8 @@ var wSVal = 0;
 var dailyQuest;
 var Quest,QuestButton,questImage,canSeeQuestButton;
 var questBox1,questBox2,questBox3,questBox4,dailyQuestBox1,dailyQuestBox2,dailyQuestBox3,dailyQuestBox4,randomQuest = 0,randomDailyQuest = 0;
-var acceptQuest,denyQuest,acceptQuest2,denyQuest2,questActive = false,dailyQuestActive = false;
-var resetQuest,resetDailyQuest,dropQuest,dropDailyQuest,questCompleted = false,maxCollectQuest = 0,maxCollectDailyQuest = 0,dailyQuestCompleted = true,collectQReward,collectDQreward;
+var acceptQuest,denyQuest,acceptDailyQuest,denyDailyQuest,questActive = false,dailyQuestActive = false;
+var resetQuest,resetDailyQuest,dropQuest,dropDailyQuest,questCompleted = false,dailyQuestCompleted = false,maxCollectQuest = 0,maxCollectDailyQuest = 0,dailyQuestCompleted = true,collectQReward,collectDQreward;
 var goBack,goBackImage;
 var halp,helpImage,canSeeHelp;
 var halpval = 0;
@@ -247,13 +247,13 @@ function setup(){
     
     acceptQuest = createSprite(400,250,75,50);
     acceptQuest.shapeColor = "green";
-    acceptQuest2 = createSprite(500,9999,75,50);
-    acceptQuest2.shapeColor = "green";
+    acceptDailyQuest = createSprite(500,9999,75,50);
+    acceptDailyQuest.shapeColor = "green";
 
     denyQuest = createSprite(500,250,75,50);
     denyQuest.shapeColor = "red";
-    denyQuest2 = createSprite(150,20000,10,200);
-    denyQuest2.shapeColor = "red";
+    denyDailyQuest = createSprite(150,20000,10,200);
+    denyDailyQuest.shapeColor = "red";
 
     collectQReward = createSprite(400,250,100,50);
     collectQReward.shapeColor = "yellow";
@@ -315,9 +315,9 @@ function draw(){
         dailyQuestBox3.visible = false
         dailyQuestBox4.visible = false
         acceptQuest.visible = false
-        acceptQuest2.visible = false
+        acceptDailyQuest.visible = false
         denyQuest.visible = false
-        denyQuest2.visible = false
+        denyDailyQuest.visible = false
 
         rc.visible = true
 
@@ -503,9 +503,9 @@ function draw(){
         dailyQuestBox3.visible = false
         dailyQuestBox4.visible = false
         acceptQuest.visible = false
-        acceptQuest2.visible = false
+        acceptDailyQuest.visible = false
         denyQuest.visible = false
-        denyQuest2.visible = false
+        denyDailyQuest.visible = false
 
         fill("white");
         textSize = 13;
@@ -738,9 +738,9 @@ function draw(){
         dailyQuestBox3.visible = false
         dailyQuestBox4.visible = false
         acceptQuest.visible = false
-        acceptQuest2.visible = false
+        acceptDailyQuest.visible = false
         denyQuest.visible = false
-        denyQuest2.visible = false
+        denyDailyQuest.visible = false
         
         fill("white")
         text(" "+coins,1460,40);
@@ -790,9 +790,9 @@ function draw(){
         dailyQuestBox3.visible = true
         dailyQuestBox4.visible = true
         acceptQuest.visible = false
-        acceptQuest2.visible = true
+        acceptDailyQuest.visible = true
         denyQuest.visible = false
-        denyQuest2.visible = true
+        denyDailyQuest.visible = true
         dropQuest.visible = false
         collectQReward.visible = false
 
@@ -846,7 +846,7 @@ function draw(){
             text("Drop quest? (pay 20 coins)",375,300);
 
             if(mousePressedOver(dropQuest) && coins>=25 && frameCount%5 === 0){
-                coins = coins-25;
+                coins = coins-20;
                 randomQuest = 0;
                 questActive = false;
             }
@@ -912,7 +912,7 @@ function draw(){
             text("Drop quest? (pay 20 coins)",375,300);
     
             if(mousePressedOver(dropQuest) && coins>=25 && frameCount%5 === 0){
-                coins = coins-25;
+                coins = coins-20;
                 randomQuest = 0;
                 questActive = false;
             }
@@ -978,7 +978,7 @@ function draw(){
             text("Drop quest? (pay 20 coins)",375,300);
 
             if(mousePressedOver(dropQuest) && coins>=25 && frameCount%5 === 0){
-                coins = coins-25;
+                coins = coins-20;
                 randomQuest = 0;
                 questActive = false;
             }
@@ -1010,11 +1010,9 @@ function draw(){
 
 
         //UNDER WORK RIGHT NOW
-        
-        /*
         // D A I L Y   Q U E S T
         if(dailyQuestActive === false && randomDailyQuest === 0){
-            randomDailyQuest = Math.round(random(1,3));
+            randomDailyQuest = 1 //Math.round(random(1,4));
         }
         //this is for daily randomQuest = 1
         if(randomDailyQuest === 1 && dailyQuestActive === false && dailyQuestCompleted === false){
@@ -1029,20 +1027,20 @@ function draw(){
             fill("yellow");
             text("Reward:200 coins",500,300);
             fill("white")
-            text("Reset Quest? 30 Coins",500,350);
+            text("Reset Quest? 50 Coins",500,350);
 
-            if(mousePressedOver(resetQuest) && coins>=20 && frameCount%5 === 0){
-                coins = coins-20;
-                questActive = false;
-                randomQuest = 0;
+            if(mousePressedOver(resetDailyQuest) && coins>=20 && frameCount%5 === 0){
+                coins = coins-50;
+                dailyQuestActive = false;
+                randomDailyQuest = 0;
             }
             
-            if(mousePressedOver(acceptQuest) && questActive === false && frameCount%5 === 0){
+            if(mousePressedOver(acceptDailyQuest) && dailyQuestActive === false && frameCount%5 === 0){
                 questActive = true
             }
             
         }
-        if(questActive === true && randomQuest === 1 && questCompleted === false){
+        if(dailyQuestActive === true && randomDailyQuest === 1 && dailyQuestCompleted === false){
             fill("green");
             text("Ongoing quest",410,150);
             fill("white")
@@ -1050,14 +1048,14 @@ function draw(){
             fill("lightgreen");
             text("Difficulty: Easy : You shouldn't have much of a difficulty in completing this",260,250);
             fill("red");
-            text("Drop quest? (pay 20 coins)",375,300);
+            text("Drop quest? (pay 30 coins)",375,300);
 
-            if(mousePressedOver(dropQuest) && coins>=25 && frameCount%5 === 0){
-                coins = coins-25;
+            if(mousePressedOver(dropDailyQuest) && coins>=30 && frameCount%5 === 0){
+                coins = coins-20;
                 randomQuest = 0;
                 questActive = false;
             }
-            if(highScore>=1000){
+            if(foodPressedCount>=5){
                 questActive = true
                 questCompleted = true
             }
@@ -1082,7 +1080,6 @@ function draw(){
                 maxCollectQuest = 0;
             }
         }
-        */
         
         fill("white")
         text("Daily quest every 6:30am GMT",670,50);
@@ -1112,9 +1109,9 @@ function draw(){
         dailyQuestBox3.visible = false
         dailyQuestBox4.visible = false
         acceptQuest.visible = false
-        acceptQuest2.visible = false
+        acceptDailyQuest.visible = false
         denyQuest.visible = false
-        denyQuest2.visible = false
+        denyDailyQuest.visible = false
         
         if(transferToBoss.x>-20){
             transferToBoss.velocityX = -150
