@@ -66,7 +66,7 @@ function preload(){
     fmI = loadImage("images/CannedFood1.png");
     flI = loadImage("images/CannedFood2.png");
     emI = loadImage("images/eM.png");
-    coinImage = loadImage("images/coin.png");
+    coinImage = loadImage("images/Coin.png");
     goBackImage = loadImage("images/goBak.png");
     helpImage = loadImage("images/HelpButtonImage.png");
     ShopImage = loadImage("images/MarketPlaceImage.png");
