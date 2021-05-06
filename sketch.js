@@ -805,11 +805,10 @@ function draw(){
         if(mousePressedOver(goBack)){
             gameState = 0
         }
-
+        //Q U E S T
         if(questActive === false && randomQuest === 0){
             randomQuest = Math.round(random(1,3));
         }
-
         //this is for daily randomQuest = 1
         if(randomQuest === 1 && questActive === false && questCompleted === false){
             fill("white");
@@ -1008,6 +1007,83 @@ function draw(){
                 maxCollectQuest = 0;
             }
         }
+
+
+        //UNDER WORK RIGHT NOW
+        
+        /*
+        // D A I L Y   Q U E S T
+        if(dailyQuestActive === false && randomDailyQuest === 0){
+            randomDailyQuest = Math.round(random(1,3));
+        }
+        //this is for daily randomQuest = 1
+        if(randomDailyQuest === 1 && dailyQuestActive === false && dailyQuestCompleted === false){
+            fill("white");
+            text("Collect 5 foods while running",500,150);
+            fill("lightgreen")
+            text("Difficulty: Easy : You shouldn't have much of a difficulty in completing this",500,200);
+            fill("green");
+            text("Accept?",500,250);
+            fill("red");
+            text("Deny?",500,250);
+            fill("yellow");
+            text("Reward:200 coins",500,300);
+            fill("white")
+            text("Reset Quest? 30 Coins",500,350);
+
+            if(mousePressedOver(resetQuest) && coins>=20 && frameCount%5 === 0){
+                coins = coins-20;
+                questActive = false;
+                randomQuest = 0;
+            }
+            
+            if(mousePressedOver(acceptQuest) && questActive === false && frameCount%5 === 0){
+                questActive = true
+            }
+            
+        }
+        if(questActive === true && randomQuest === 1 && questCompleted === false){
+            fill("green");
+            text("Ongoing quest",410,150);
+            fill("white")
+            text("Get a score of 1000 in a single try",360,200);
+            fill("lightgreen");
+            text("Difficulty: Easy : You shouldn't have much of a difficulty in completing this",260,250);
+            fill("red");
+            text("Drop quest? (pay 20 coins)",375,300);
+
+            if(mousePressedOver(dropQuest) && coins>=25 && frameCount%5 === 0){
+                coins = coins-25;
+                randomQuest = 0;
+                questActive = false;
+            }
+            if(highScore>=1000){
+                questActive = true
+                questCompleted = true
+            }
+        }
+        if(questActive === true && questCompleted === true && randomQuest === 1){
+            fill("green");
+            text("Quest Completed!",410,150);
+            fill("white");
+            text("Get a score of 1000 in a single try",360,200);
+            fill("lightgreen");
+            text("Collect Your reward here",400,250);
+            if(mousePressedOver(collectQReward) && maxCollectQuest === 0 && frameCount%5 === 0){
+                coins = coins+100;  
+                maxCollectQuest = 1
+            }
+        }
+        if(maxCollectQuest === 1){
+                if(frameCount%2 === 0){
+                randomQuest = 0;
+                questActive = false
+                questCompleted = false
+                maxCollectQuest = 0;
+            }
+        }
+        */
+        
         fill("white")
         text("Daily quest every 6:30am GMT",670,50);
         text("More quests in development",678,70);
