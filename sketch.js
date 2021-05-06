@@ -24,7 +24,7 @@ var waterGroup;
 var restartButton;
 var emI;
 var dRG;
-var coins = 50,coinImage,coin,maxCoinMulti = 0;
+var coins = 999999,coinImage,coin,maxCoinMulti = 0;
 var gems = 0,gemImage;
 var Shop,ShopImage,canSeeShop;
 var lSVal = 0;
@@ -1297,7 +1297,7 @@ function buyStuff(){
 
     goBack.visible = true
     //Pt1
-    if(mousePressedOver(buy1) && coins>=50 && lSVal<7){
+    if(mousePressedOver(buy1) && coins>=50 && lSVal<7 && frameCount%3 === 0){
         coins = coins-50; 
         lSVal = lSVal+1
     }
@@ -1319,7 +1319,7 @@ function buyStuff(){
     text("Price =       50 coins",200,120);
 
     //Pt2
-    if(mousePressedOver(buy2) && coins>=100 && fSVal<7){
+    if(mousePressedOver(buy2) && coins>=100 && fSVal<7 && frameCount%3 === 0){
         coins = coins-100; 
         fSVal = fSVal+1
     }
@@ -1339,7 +1339,7 @@ function buyStuff(){
     text("Price =       100 coins",700,120);
 
     //Pt3
-    if(mousePressedOver(buy3) && coins>=100 && wSVal<7){
+    if(mousePressedOver(buy3) && coins>=100 && wSVal<7 && frameCount%3 === 0){
         coins = coins-100; 
         wSVal = wSVal+1
     }
@@ -1367,7 +1367,7 @@ function buyStuff(){
     fill("white")
     text("Price =       1000 coins",200,320);
 
-    if(mousePressedOver(buy4) && coins>=1000 && maxCoinMulti === 0){
+    if(mousePressedOver(buy4) && coins>=1000 && maxCoinMulti === 0 && frameCount%3 === 0){
         coins = coins-1000; 
         maxCoinMulti = maxCoinMulti+1
     }
