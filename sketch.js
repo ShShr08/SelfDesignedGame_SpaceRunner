@@ -1336,7 +1336,7 @@ function getSupplies(){
         else if(randY === 3){
             wotw.velocityY = 0;
         }
-        waterGroup.add(wotw)
+        waterGroup.add(wotw);
     }
 }
 
