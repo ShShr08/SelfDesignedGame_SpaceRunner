@@ -10,15 +10,15 @@ var lG;
 var ahB,ahB2,ahB3,ahB4,ahB5,ahB6,ahbG;
 var gameState = 0;
 var lP;
-var foodStock = 10;
-var waterStock = 5;
-var startButton;
+var foodStock = 10,foodPressedCount = 0;
+var waterStock = 5,waterPressedCount = 0;
+var startButton,startButtonImage;
 var rI;
 var w1,w2,w3,w4,w5,wI1,wI2,wI3,wI4,wI5;
 var fm,fl,fmI,flI;
 var rSt;
 var score = 0,highScore = 0;
-var randX,randY;
+var randX,randY,rand = 0;
 var foodGroup;
 var waterGroup;
 var restartButton;
@@ -34,7 +34,7 @@ var dailyQuest;
 var Quest,QuestButton,questImage,canSeeQuestButton;
 var questBox1,questBox2,questBox3,questBox4,dailyQuestBox1,dailyQuestBox2,dailyQuestBox3,dailyQuestBox4,randomQuest = 0,randomDailyQuest = 0;
 var acceptQuest,denyQuest,acceptQuest2,denyQuest2,questActive = false,dailyQuestActive = false;
-var resetQuest,resetDailyQuest,dropQuest,dropDailyQuest,questCompleted = false,dailyQuestCompleted = true,collectQReward,collectDQreward;
+var resetQuest,resetDailyQuest,dropQuest,dropDailyQuest,questCompleted = false,maxCollectQuest = 0,maxCollectDailyQuest = 0,dailyQuestCompleted = true,collectQReward,collectDQreward;
 var goBack,goBackImage;
 var halp,helpImage,canSeeHelp;
 var halpval = 0;
@@ -72,7 +72,9 @@ function preload(){
     ShopImage = loadImage("images/MarketPlaceImage.png");
     questImage = loadImage("images/QuestButtonImage.png");
     bossImage = loadImage("images/SpaceBoss.png");
-    bossBackground = loadImage("images/BossBackgroundImage.png")
+    bossBackground = loadImage("images/BossBackgroundImage.png");
+    startButtonImage = loadImage("images/Play.png");
+
 }
 
 
@@ -139,6 +141,8 @@ function setup(){
     fl.scale = 1
     
     startButton = createSprite(768,361,45,45);
+    startButton.addImage(startButtonImage);
+    startButton.scale = 0.2
     restartButton = createSprite(768,361,50,50);
     rSt = createSprite(1525,10,25,25);
 
@@ -642,12 +646,14 @@ function draw(){
         for(i=0;i<waterGroup.length;i++){
             if(mousePressedOver(waterGroup[i])){
                 waterStock = waterStock+1;
+                waterPressedCount = waterPressedCount+1
                 waterGroup[i].destroy();
             }
         }
         for(i=0;i<foodGroup.length;i++){
-            if(mousePressedOver(waterGroup[i])){
+            if(mousePressedOver(foodGroup[i])){
                 foodStock = foodStock+1;
+                foodPressedCount = foodPressedCount+1
                 foodGroup[i].destroy();
             }
         }
@@ -759,7 +765,7 @@ function draw(){
         canSeeQuestButton.visible = false
         transferToBoss.visible = false
         collectQReward.visible = false
-        resetQuest.visible = true
+        resetQuest.visible = false
           
         boss.visible = false
         coin.visible = true
@@ -775,7 +781,6 @@ function draw(){
         ground.visible = false
         halp.visible = false
         goBack.visible = true
-        resetQuest.visible = false
         questBox1.visible = true
         questBox2.visible = true
         questBox3.visible = true
@@ -802,11 +807,11 @@ function draw(){
         }
 
         if(questActive === false && randomQuest === 0){
-            randomQuest = 1 //Math.round(random(1,3));
+            randomQuest = Math.round(random(1,3));
         }
 
         //this is for daily randomQuest = 1
-        if(randomQuest === 1 && questActive === false){
+        if(randomQuest === 1 && questActive === false && questCompleted === false){
             fill("white");
             text("Get a score of 1000 in a single try",350,150);
             fill("lightgreen")
@@ -819,67 +824,190 @@ function draw(){
             text("Reward:100 coins",400,300);
             fill("white")
             text("Reset Quest? 20 Coins",390,350);
+
+            if(mousePressedOver(resetQuest) && coins>=20 && frameCount%5 === 0){
+                coins = coins-20;
+                questActive = false;
+                randomQuest = 0;
+            }
             
-            if(mousePressedOver(acceptQuest) && questActive === false){
+            if(mousePressedOver(acceptQuest) && questActive === false && frameCount%5 === 0){
                 questActive = true
             }
+            
         }
-        if(questActive === true && randomQuest === 1){
+        if(questActive === true && randomQuest === 1 && questCompleted === false){
             fill("green");
             text("Ongoing quest",410,150);
             fill("white")
             text("Get a score of 1000 in a single try",360,200);
             fill("lightgreen");
             text("Difficulty: Easy : You shouldn't have much of a difficulty in completing this",260,250);
-            fill("red")
+            fill("red");
             text("Drop quest? (pay 20 coins)",375,300);
-            if(mousePressedOver(resetQuest) && coins>=20){
-                coins = coins-20;
-            }
-            if(mousePressedOver(dropQuest) && coins>=25){
+
+            if(mousePressedOver(dropQuest) && coins>=25 && frameCount%5 === 0){
                 coins = coins-25;
                 randomQuest = 0;
                 questActive = false;
             }
             if(highScore>=1000){
-                questActive = false
+                questActive = true
                 questCompleted = true
             }
         }
-        if(questActive === false && questCompleted === true && randomQuest === 1){
-            fill("green")
+        if(questActive === true && questCompleted === true && randomQuest === 1){
+            fill("green");
             text("Quest Completed!",410,150);
-            fill("white")
+            fill("white");
             text("Get a score of 1000 in a single try",360,200);
-            fill("lightgreen")
+            fill("lightgreen");
             text("Collect Your reward here",400,250);
-            if(mousePressedOver(collectQReward)){
-                coins = coins+100;
-                questActive = false;
-                questCompleted = false;
-                randomQuest = 0
+            if(mousePressedOver(collectQReward) && maxCollectQuest === 0 && frameCount%5 === 0){
+                coins = coins+100;  
+                maxCollectQuest = 1
+            }
+        }
+        if(maxCollectQuest === 1){
+                if(frameCount%2 === 0){
+                randomQuest = 0;
+                questActive = false
+                questCompleted = false
+                maxCollectQuest = 0;
             }
         }
 
-        //This is for randomQuest === 2
+        //this is for randomQuest === 2
         if(randomQuest === 2 && questActive === false){
             fill("white");
+            text("Get a score of 2500 in a single try",350,150);
+            fill("orange")
+            text("Difficulty: Medium : Not that hard but not easy either",300,200);
+            fill("green");
+            text("Accept?",375,250);
+            fill("red");
+            text("Deny?",480,250);
+            fill("yellow");
+            text("Reward:200 coins",400,300);
+            fill("white");
+            text("Reset Quest? 20 Coins",390,350);
+
+            if(mousePressedOver(resetQuest) && coins>=20 && frameCount%5 === 0){
+                coins = coins-20;
+                questActive = false;
+                randomQuest = 0;
+            }
+            if(mousePressedOver(acceptQuest) && questActive === false && frameCount%5 === 0){
+                questActive = true
+            }
+        }
+
+        if(questActive === true && randomQuest === 2 && questCompleted === false){
+            fill("green");
+            text("Ongoing quest",410,150);
+            fill("white")
+            text("Get a score of 2500 in a single try",350,200);
+            fill("orange");
+            text("Difficulty: Medium : Not that hard but not easy either",300,250);
+            fill("red");
+            text("Drop quest? (pay 20 coins)",375,300);
+    
+            if(mousePressedOver(dropQuest) && coins>=25 && frameCount%5 === 0){
+                coins = coins-25;
+                randomQuest = 0;
+                questActive = false;
+            }
+            if(highScore>=2500){
+                questActive = true
+                questCompleted = true
+            }
+        }
+        if(questActive === true && questCompleted === true && randomQuest === 2){
+            fill("green");
+            text("Quest Completed!",410,150);
+            fill("white");
+            text("Get a score of 2500 in a single try",360,200);
+            fill("lightgreen");
+            text("Collect Your reward here",400,250);
+            if(mousePressedOver(collectQReward) && maxCollectQuest === 0 && frameCount%5 === 0){
+                coins = coins+200;  
+                maxCollectQuest = 1
+            }
+        }
+        if(maxCollectQuest === 1){
+                if(frameCount%2 === 0){
+                randomQuest = 0;
+                questActive = false
+                questCompleted = false
+                maxCollectQuest = 0;
+            }
+        }
+
+        //This is for randomQuest === 3
+        if(randomQuest === 3 && questActive === false){
+            fill("white");
             text("Get a score of 5000 in a single try",350,150);
-            fill("lightgreen")
-            text("Difficulty: Hard : Might be difficult in doing this quest",260,200);
+            fill("red")
+            text("Difficulty: Hard : Might be difficult in doing this quest",300,200);
             fill("green");
             text("Accept?",375,250);
             fill("red");
             text("Deny?",480,250);
             fill("yellow");
             text("Reward:550 coins",400,300);
-            
-            if(mousePressedOver(acceptQuest) && questActive === false){
+            fill("white");
+            text("Reset Quest? 20 Coins",390,350);
+
+            if(mousePressedOver(resetQuest) && coins>=20 && frameCount%5 === 0){
+                coins = coins-20;
+                questActive = false;
+                randomQuest = 0;
+            }
+            if(mousePressedOver(acceptQuest) && questActive === false && frameCount%5 === 0){
                 questActive = true
             }
         }
 
+        if(questActive === true && randomQuest === 3 && questCompleted === false){
+            fill("green");
+            text("Ongoing quest",410,150);
+            fill("white")
+            text("Get a score of 5000 in a single try",350,200);
+            fill("red");
+            text("Difficulty: Hard : Might be difficult in doing this quest",300,250);
+            fill("red");
+            text("Drop quest? (pay 20 coins)",375,300);
 
+            if(mousePressedOver(dropQuest) && coins>=25 && frameCount%5 === 0){
+                coins = coins-25;
+                randomQuest = 0;
+                questActive = false;
+            }
+            if(highScore>=5000){
+                questActive = true
+                questCompleted = true
+            }
+        }
+        if(questActive === true && questCompleted === true && randomQuest === 3){
+            fill("green");
+            text("Quest Completed!",410,150);
+            fill("white");
+            text("Get a score of 5000 in a single try",360,200);
+            fill("lightgreen");
+            text("Collect Your reward here",400,250);
+            if(mousePressedOver(collectQReward) && maxCollectQuest === 0 && frameCount%5 === 0){
+                coins = coins+550;  
+                maxCollectQuest = 1
+            }
+        }
+        if(maxCollectQuest === 1){
+            if(frameCount%2 === 0){
+                randomQuest = 0;
+                questActive = false
+                questCompleted = false
+                maxCollectQuest = 0;
+            }
+        }
         fill("white")
         text("Daily quest every 6:30am GMT",670,50);
         text("More quests in development",678,70);
@@ -1255,109 +1383,120 @@ function buyStuff(){
 }
 
 function youreDead(){
-    if(score%200 === 0){
-            rand = Math.round(random(1,3))
-        if(rand === 1){
-            if(score%1000 === 0){
-                eM = createSprite(20,150,10,10);
-                eM.addImage(emI);
-                eM.scale = 0.2;
-                eM.lifetime = 60;
-                eM2 = createSprite(1516,150,10,10);
-                eM2.addImage(emI);
-                eM2.scale = 0.2;
-                eM2.lifetime = 60;
-                eM3 = createSprite(20,450,10,10);
-                eM3.addImage(emI);
-                eM3.scale = 0.2;
-                eM3.lifetime = 60;
-                eM4 = createSprite(1516,450,10,10);
-                eM4.addImage(emI);
-                eM4.scale = 0.2;
-                eM4.lifetime = 60;
+    if(rand === 0){
+        rand = Math.round(random(1,3));
+    }
+    if(rand === 1){
+        if(score%1000 === 0){
+            eM = createSprite(20,150,10,10);
+            eM.addImage(emI);
+            eM.scale = 0.2;
+            eM.lifetime = 50;
+            eM2 = createSprite(1516,150,10,10);
+            eM2.addImage(emI);
+            eM2.scale = 0.2;
+            eM2.lifetime = 50;
+            eM3 = createSprite(20,450,10,10);
+            eM3.addImage(emI);
+            eM3.scale = 0.2;
+            eM3.lifetime = 50;
+            eM4 = createSprite(1516,450,10,10);
+            eM4.addImage(emI);
+            eM4.scale = 0.2;
+            eM4.lifetime = 50;
             }
-            if(score%1050 === 0){
-                dR = createSprite(768,150,1536,5);
-                dR.shapeColor = "red";
-                dR.lifetime = 100;
-                dR2 = createSprite(768,450,1536,5);
-                dR2.shapeColor = "red";
-                dR2.lifetime = 100;
-                dRG.add(dR);
-                dRG.add(dR2);
+        if(score%1050 === 0){
+            dR = createSprite(768,150,1536,5);
+            dR.shapeColor = "red";
+            dR.lifetime = 100;
+            dR2 = createSprite(768,450,1536,5);
+            dR2.shapeColor = "red";
+            dR2.lifetime = 100;
+            dRG.add(dR);
+            dRG.add(dR2);
             }
+        if(score%1100 === 0){
+            rand = 0
         }
-        if(rand === 2){
-            if(score%500 === 0){
-                eM = createSprite(384,20,10,10);
-                eM.addImage(emI);
-                eM.scale = 0.2;
-                eM.lifetime = 60;
-                eM2 = createSprite(384,702,10,10);
-                eM2.addImage(emI);
-                eM2.scale = 0.2;
-                eM2.lifetime = 60;
-                eM3 = createSprite(768,20,10,10);
-                eM3.addImage(emI);
-                eM3.scale = 0.2;
-                eM3.lifetime = 60;
-                eM4 = createSprite(768,702,10,10);
-                eM4.addImage(emI);
-                eM4.scale = 0.2;
-                eM4.lifetime = 60;
-                eM5 = createSprite(1152,20,10,10);
-                eM5.addImage(emI);
-                eM5.scale = 0.2;
-                eM5.lifetime = 60;
-                eM6 = createSprite(1152,702,10,10);
-                eM6.addImage(emI);
-                eM6.scale = 0.2;
-                eM6.lifetime = 60;
+    }
+
+    if(rand === 2){
+        if(score%500 === 0){
+            eM = createSprite(384,20,10,10);
+            eM.addImage(emI);
+            eM.scale = 0.2;
+            eM.lifetime = 50;
+            eM2 = createSprite(384,702,10,10);
+            eM2.addImage(emI);
+            eM2.scale = 0.2;
+            eM2.lifetime = 50;
+            eM3 = createSprite(768,20,10,10);
+            eM3.addImage(emI);
+            eM3.scale = 0.2;
+            eM3.lifetime = 50;
+            eM4 = createSprite(768,702,10,10);
+            eM4.addImage(emI);
+            eM4.scale = 0.2;
+            eM4.lifetime = 50;
+            eM5 = createSprite(1152,20,10,10);
+            eM5.addImage(emI);
+            eM5.scale = 0.2;
+            eM5.lifetime = 50;
+            eM6 = createSprite(1152,702,10,10);
+            eM6.addImage(emI);
+            eM6.scale = 0.2;
+            eM6.lifetime = 50;
             }
-            if(score%550 === 0){
-                dR = createSprite(384,361,5,722);
-                dR.shapeColor = "red";
-                dR.lifetime = 100;
-                dR2 = createSprite(768,361,5,722);
-                dR2.shapeColor = "red";
-                dR2.lifetime = 100;
-                dR3 = createSprite(1152,361,5,722);
-                dR3.shapeColor = "red";
-                dR3.lifetime = 100;
-                dRG.add(dR);
-                dRG.add(dR2);
-                dRG.add(dR3);
-            }
+        if(score%550 === 0){
+            dR = createSprite(384,361,5,722);
+            dR.shapeColor = "red";
+            dR.lifetime = 100;
+            dR2 = createSprite(768,361,5,722);
+            dR2.shapeColor = "red";
+            dR2.lifetime = 100;
+            dR3 = createSprite(1152,361,5,722);
+            dR3.shapeColor = "red";
+            dR3.lifetime = 100;
+            dRG.add(dR);
+            dRG.add(dR2);
+            dRG.add(dR3);
         }
-        if(rand === 3){
-            if(score%1500 === 0){
-                eM = createSprite(768,20,10,10);
-                eM.addImage(emI);
-                eM.scale = 0.2;
-                eM.lifetime = 60;
-                eM2 = createSprite(768,702,10,10);
-                eM2.addImage(emI);
-                eM2.scale = 0.2;
-                eM2.lifetime = 60;
-                eM3 = createSprite(20,361,10,10);
-                eM3.addImage(emI);
-                eM3.scale = 0.2;
-                eM3.lifetime = 60;
-                eM4 = createSprite(1516,361,10,10);
-                eM4.addImage(emI);
-                eM4.scale = 0.2;
-                eM4.lifetime = 60;
-            }
-            if(score%1550 === 0){
-                dR = createSprite(768,361,1536,5);
-                dR.shapeColor = "red";
-                dR.lifetime = 100;
-                dR2 = createSprite(361,768,1536,5);
-                dR2.shapeColor = "red";
-                dR2.lifetime = 100;
-                dRG.add(dR);
-                dRG.add(dR2);
-            }
+        if(score%600 === 0){
+            rand = 0;
+        }
+    }
+
+    if(rand === 3){
+        if(score%1500 === 0){
+            eM = createSprite(768,20,10,10);
+            eM.addImage(emI);
+            eM.scale = 0.2;
+            eM.lifetime = 60;
+            eM2 = createSprite(768,702,10,10);
+            eM2.addImage(emI);
+            eM2.scale = 0.2;
+            eM2.lifetime = 60;
+            eM3 = createSprite(20,361,10,10);
+            eM3.addImage(emI);
+            eM3.scale = 0.2;
+            eM3.lifetime = 60;
+            eM4 = createSprite(1516,361,10,10);
+            eM4.addImage(emI);
+            eM4.scale = 0.2;
+            eM4.lifetime = 60;
+        }
+        if(score%1550 === 0){
+            dR = createSprite(768,361,1536,5);
+            dR.shapeColor = "red";
+            dR.lifetime = 100;
+            dR2 = createSprite(361,768,1536,5);
+            dR2.shapeColor = "red";
+            dR2.lifetime = 100;
+            dRG.add(dR);
+            dRG.add(dR2);
+        }
+        if(score&1600 === 0){
+            rand = 0;
         }
     }
 }
