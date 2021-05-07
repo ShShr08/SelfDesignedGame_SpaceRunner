@@ -24,12 +24,12 @@ var waterGroup;
 var restartButton;
 var emI;
 var dRG;
-var coins = 999999,coinImage,coin,maxCoinMulti = 0;
+var coins = 50,coinImage,coin,maxCoinMulti = 0;
 var gems = 0,gemImage;
 var Shop,ShopImage,canSeeShop;
 var lSVal = 0;
-var fSVal = 0;
-var wSVal = 0;
+var fSVal = 0,waterOnTheWay,waterOnTheWayImage;
+var wSVal = 0,foodOnTheWay,randomFoodOnTheWayImage,foodOnTheWayImage,foodOnTheWayImage2,foodOnTheWayImage3,foodOnTheWayImage4;
 var dailyQuest;
 var Quest,QuestButton,questImage,canSeeQuestButton;
 var questBox1,questBox2,questBox3,questBox4,dailyQuestBox1,dailyQuestBox2,dailyQuestBox3,dailyQuestBox4,randomQuest = 0,randomDailyQuest = 0;
@@ -74,7 +74,11 @@ function preload(){
     bossImage = loadImage("images/SpaceBoss.png");
     bossBackground = loadImage("images/BossBackgroundImage.png");
     startButtonImage = loadImage("images/Play.png");
-
+    waterOnTheWayImage = loadImage("images/Drop.png");
+    foodOnTheWayImage = loadImage("images/FoodImage1.png");
+    foodOnTheWayImage2 = loadImage("images/FoodImage2.png");
+    foodOnTheWayImage3 = loadImage("images/FoodImage3.png");
+    foodOnTheWayImage4 = loadImage("images/FoodImage4.png");
 }
 
 
@@ -1015,20 +1019,21 @@ function draw(){
             randomDailyQuest = 1 //Math.round(random(1,4));
         }
         //this is for daily randomQuest = 1
-        if(randomDailyQuest === 1 && dailyQuestActive === false && dailyQuestCompleted === false){
+        if(randomDailyQuest === 1 && dailyQuestActive === false){
             fill("white");
-            text("Collect 5 foods while running",500,150);
-            fill("lightgreen")
-            text("Difficulty: Easy : You shouldn't have much of a difficulty in completing this",500,200);
+            text("Collect 5 foods while running",1020,425);
+            fill("lightgreen");
+            text("Difficulty: Easy : You shouldn't have much of a difficulty in completing this",900,475);
             fill("green");
             text("Accept?",500,250);
             fill("red");
             text("Deny?",500,250);
             fill("yellow");
             text("Reward:200 coins",500,300);
-            fill("white")
+            fill("white");
             text("Reset Quest? 50 Coins",500,350);
 
+            /*
             if(mousePressedOver(resetDailyQuest) && coins>=20 && frameCount%5 === 0){
                 coins = coins-50;
                 dailyQuestActive = false;
@@ -1038,8 +1043,9 @@ function draw(){
             if(mousePressedOver(acceptDailyQuest) && dailyQuestActive === false && frameCount%5 === 0){
                 questActive = true
             }
-            
+            */
         }
+        /*
         if(dailyQuestActive === true && randomDailyQuest === 1 && dailyQuestCompleted === false){
             fill("green");
             text("Ongoing quest",410,150);
@@ -1067,19 +1073,20 @@ function draw(){
             text("Get a score of 1000 in a single try",360,200);
             fill("lightgreen");
             text("Collect Your reward here",400,250);
-            if(mousePressedOver(collectQReward) && maxCollectQuest === 0 && frameCount%5 === 0){
+            if(mousePressedOver(collectDQreward) && maxCollectDailyQuest === 0 && frameCount%5 === 0){
                 coins = coins+100;  
-                maxCollectQuest = 1
+                maxCollectDailyQuest = 1
             }
         }
-        if(maxCollectQuest === 1){
+        if(maxCollectDailyQuest === 1){
                 if(frameCount%2 === 0){
-                randomQuest = 0;
-                questActive = false
-                questCompleted = false
-                maxCollectQuest = 0;
+                randomDailyQuest = 0;
+                dailyQuestActive = false
+                dailyQuestCompleted = false
+                maxCollectDailyQuest = 0;
             }
         }
+        */
         
         fill("white")
         text("Daily quest every 6:30am GMT",670,50);
@@ -1199,144 +1206,255 @@ function sB(){
 
 function getSupplies(){
     if(score%400 === 0){
-        fotw = createSprite(Math.round(random(100,1400)),Math.round(random(50,677)),50,50);
-        fotw.shapeColor = "orange";
-        fotw.lifetime = 75;
-        foodGroup.add(fotw)
+        randomFoodOnTheWayImage = Math.round(random(1,4))
+        foodOnTheWay = createSprite(Math.round(random(100,1400)),Math.round(random(50,677)),50,50);
+        if(randomFoodOnTheWayImage === 1){
+            foodOnTheWay.addImage(foodOnTheWayImage);
+            foodOnTheWay.scale = 0.5;
+        }
+        if(randomFoodOnTheWayImage === 2){
+            foodOnTheWay.addImage(foodOnTheWayImage2);
+            foodOnTheWay.scale = 0.5;
+        }
+        if(randomFoodOnTheWayImage === 3){
+            foodOnTheWay.addImage(foodOnTheWayImage3);
+            foodOnTheWay.scale = 0.3;
+        }
+        if(randomFoodOnTheWayImage === 4){
+            foodOnTheWay.addImage(foodOnTheWayImage4);
+            foodOnTheWay.scale = 0.3;
+        }
+        foodOnTheWay.shapeColor = "orange";
+        foodOnTheWay.lifetime = 75;
+        foodGroup.add(foodOnTheWay);
         if(randX === 1){
             if(fSVal === 0){
-                fotw.velocityX = -13;
+                foodOnTheWay.velocityX = -13;
             }
             if(fSVal === 1){
-                fotw.velocityX = -12;
+                foodOnTheWay.velocityX = -12;
             }
             if(fSVal === 2){
-                fotw.velocityX = -11;
+                foodOnTheWay.velocityX = -11;
             }
             if(fSVal === 3){
-                fotw.velocityX = -10;
+                foodOnTheWay.velocityX = -10;
             }
             if(fSVal === 4){
-                fotw.velocityX = -9;
+                foodOnTheWay.velocityX = -9;
             }
             if(fSVal === 5){
-                fotw.velocityX = -8;
+                foodOnTheWay.velocityX = -8;
             }
             if(fSVal === 6){
-                fotw.velocityX = -7;
+                foodOnTheWay.velocityX = -7;
             }
             if(fSVal === 7){
-                fotw.velocityX = -6;
+                foodOnTheWay.velocityX = -6;
             }
         }
         else if(randX === 2){
             if(fSVal === 0){
-                fotw.veloctyX = 13;
+                foodOnTheWay.veloctyX = 13;
             }
             if(fSVal === 1){
-                fotw.veloctyX = 12;
+                foodOnTheWay.veloctyX = 12;
             }
             if(fSVal === 2){
-                fotw.veloctyX = 11;
+                foodOnTheWay.veloctyX = 11;
             }
             if(fSVal === 3){
-                fotw.veloctyX = 10;
+                foodOnTheWay.veloctyX = 10;
             }
             if(fSVal === 4){
-                fotw.veloctyX = 9;
+                foodOnTheWay.veloctyX = 9;
             }
             if(fSVal === 5){
-                fotw.veloctyX = 8;
+                foodOnTheWay.veloctyX = 8;
             }
             if(fSVal === 6){
-                fotw.veloctyX = 7;
+                foodOnTheWay.veloctyX = 7;
             }
             if(fSVal === 7){
-                fotw.veloctyX = 6;
+                foodOnTheWay.veloctyX = 6;
             }
         }
         else if(randX === 3){
-            fotw.velocityX = 0;
+            foodOnTheWay.velocityX = 0;
         }
         if(randY === 1){
             if(fSVal === 0){
-                fotw.velocityY = -13;
+                foodOnTheWay.velocityY = -13;
             }
             if(fSVal === 1){
-                fotw.velocityY = -12;
+                foodOnTheWay.velocityY = -12;
             }
             if(fSVal === 2){
-                fotw.velocityY = -11;
+                foodOnTheWay.velocityY = -11;
             }
             if(fSVal === 3){
-                fotw.velocityY = -10;
+                foodOnTheWay.velocityY = -10;
             }
             if(fSVal === 4){
-                fotw.velocityY = -9;
+                foodOnTheWay.velocityY = -9;
             }
             if(fSVal === 5){
-                fotw.velocityY = -8;
+                foodOnTheWay.velocityY = -8;
             }
             if(fSVal === 6){
-                fotw.velocityY = -7;
+                foodOnTheWay.velocityY = -7;
             }
             if(fSVal === 7){
-                fotw.velocityY = -6;
+                foodOnTheWay.velocityY = -6;
             }
         }
         else if(randY === 2){
-            if(fotw === 0){
-                fotw.velocityY = 13;
+            if(fSVal === 0){
+                foodOnTheWay.velocityY = 13;
             }
-            if(fotw === 1){
-                fotw.velocityY = 12;
+            if(fSVal === 1){
+                foodOnTheWay.velocityY = 12;
             }
-            if(fotw === 2){
-                fotw.velocityY = 11;
+            if(fSVal === 2){
+                foodOnTheWay.velocityY = 11;
             }
-            if(fotw === 3){
-                fotw.velocityY = 10;
+            if(fSVal === 3){
+                foodOnTheWay.velocityY = 10;
             }
-            if(fotw === 4){
-                fotw.velocityY = 9;
+            if(fSVal === 4){
+                foodOnTheWay.velocityY = 9;
             }
-            if(fotw === 5){
-                fotw.velocityY = 8;
+            if(fSVal === 5){
+                foodOnTheWay.velocityY = 8;
             }
-            if(fotw === 6){
-                fotw.velocityY = 7;
+            if(fSVal === 6){
+                foodOnTheWay.velocityY = 7;
             }
-            if(fotw === 7){
-                fotw.velocityY = 6;
+            if(fSVal === 7){
+                foodOnTheWay.velocityY = 6;
             }
         }
         else if(randY === 3){
-            fotw.velocityY = 0;
+            foodOnTheWay.velocityY = 0;
         }
     }
-    if(score%900 === 0){
-        wotw = createSprite(Math.round(random(100,1400)),Math.round(random(50,677)),50,50);
-        wotw.shapeColor = "blue";
-        wotw.lifetime = 100;
+    if(score%500 === 0){
+        waterOnTheWay = createSprite(Math.round(random(100,1400)),Math.round(random(50,677)),50,50);
+        waterOnTheWay.addImage(waterOnTheWayImage);
+        waterOnTheWay.scale = 0.2
+        waterOnTheWay.shapeColor = "blue";
+        waterOnTheWay.lifetime = 100;
         if(randX === 1){
-            wotw.velocityX = -13;
+            if(wSVal === 0){
+            waterOnTheWay.velocityX = -13;
+            }
+            if(wSVal === 1){
+                waterOnTheWay.velocityX = -12;
+            }
+            if(wSVal === 2){
+                waterOnTheWay.velocityX = -11;
+            }
+            if(wSVal === 3){
+                waterOnTheWay.velocityX = -10;
+            }
+            if(wSVal === 4){
+                waterOnTheWay.velocityX = -9;
+            }
+            if(wSVal === 5){
+                waterOnTheWay.velocityX = -8;
+            }
+            if(wSVal === 6){
+                waterOnTheWay.velocityX = -7;
+            }
+            if(wSVal === 7){
+                waterOnTheWay.velocityX = -6;
+            }
         }
         else if(randX === 2){
-            wotw.veloctyX = 13;
+            if(wSVal === 0){
+                waterOnTheWay.veloctyX = 13;
+            }
+            if(wSVal === 1){
+                waterOnTheWay.veloctyX = 12;
+            }
+            if(wSVal === 2){
+                waterOnTheWay.veloctyX = 11;
+            }
+            if(wSVal === 3){
+                waterOnTheWay.veloctyX = 10;
+            }
+            if(wSVal === 4){
+                waterOnTheWay.veloctyX = 9;
+            }
+            if(wSVal === 5){
+                waterOnTheWay.veloctyX = 8;
+            }
+            if(wSVal === 6){
+                waterOnTheWay.veloctyX = 7;
+            }
+            if(wSVal === 7){
+                waterOnTheWay.veloctyX = 6;
+            }
         }
         else if(randX === 3){
-            wotw.velocityX = 0;
+            waterOnTheWay.velocityX = 0;
         }
         if(randY === 1){
-            wotw.velocityY = -13;
+            if(wSVal === 0){
+                waterOnTheWay.velocityY = -13;
+            }
+            if(wSVal === 1){
+                waterOnTheWay.velocityY = -12;
+            }
+            if(wSVal === 2){
+                waterOnTheWay.velocityY = -11;
+            }
+            if(wSVal === 3){
+                waterOnTheWay.velocityY = -10;
+            }
+            if(wSVal === 4){
+                waterOnTheWay.velocityY = -9;
+            }
+            if(wSVal === 5){
+                waterOnTheWay.velocityY = -8;
+            }
+            if(wSVal === 6){
+                waterOnTheWay.velocityY = -7;
+            }
+            if(wSVal === 7){
+                waterOnTheWay.velocityY = -9;
+            }
         }
         else if(randY === 2){
-            wotw.velocityY = 13;
+            if(wSVal === 0){
+                waterOnTheWay.velocityY = 13;
+            }
+            if(wSVal === 1){
+                waterOnTheWay.velocityY = 12;
+            }
+            if(wSVal === 2){
+                waterOnTheWay.velocityY = 11;
+            }
+            if(wSVal === 3){
+                waterOnTheWay.velocityY = 10;
+            }
+            if(wSVal === 4){
+                waterOnTheWay.velocityY = 9;
+            }
+            if(wSVal === 5){
+                waterOnTheWay.velocityY = 8;
+            }
+            if(wSVal === 6){
+                waterOnTheWay.velocityY = 7;
+            }
+            if(wSVal === 7){
+                waterOnTheWay.velocityY = 6;
+            }
         }
         else if(randY === 3){
-            wotw.velocityY = 0;
+            waterOnTheWay.velocityY = 0;
         }
-        waterGroup.add(wotw);
+        waterGroup.add(waterOnTheWay);
     }
 }
 
