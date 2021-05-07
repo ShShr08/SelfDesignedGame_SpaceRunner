@@ -33,7 +33,8 @@ var wSVal = 0,foodOnTheWay,randomFoodOnTheWayImage,foodOnTheWayImage,foodOnTheWa
 var dailyQuest;
 var Quest,QuestButton,questImage,canSeeQuestButton;
 var questBox1,questBox2,questBox3,questBox4,dailyQuestBox1,dailyQuestBox2,dailyQuestBox3,dailyQuestBox4,randomQuest = 0,randomDailyQuest = 0;
-var acceptQuest,denyQuest,acceptDailyQuest,denyDailyQuest,questActive = false,dailyQuestActive = false;
+var acceptQuest,denyQuest,acceptDailyQuest,denyDailyQuest,deniedQuestCooldown = 0,deniedQuestCooldownSeconds = 0,deniedQuestCooldownMinutes = 0;
+var deniedDailyQuestCooldown = 0,deniedDailyQuestCooldownSeconds = 0,deniedDailyQuestCooldownMinutes = 0,questActive = false,dailyQuestActive = false;
 var resetQuest,resetDailyQuest,dropQuest,dropDailyQuest,questCompleted = false,dailyQuestCompleted = false,maxCollectQuest = 0,maxCollectDailyQuest = 0,dailyQuestCompleted = true,collectQReward,collectDQreward;
 var goBack,goBackImage;
 var halp,helpImage,canSeeHelp;
@@ -251,21 +252,25 @@ function setup(){
     
     acceptQuest = createSprite(400,250,75,50);
     acceptQuest.shapeColor = "green";
-    acceptDailyQuest = createSprite(500,9999,75,50);
+    acceptDailyQuest = createSprite(1030,525,75,50);
     acceptDailyQuest.shapeColor = "green";
 
     denyQuest = createSprite(500,250,75,50);
     denyQuest.shapeColor = "red";
-    denyDailyQuest = createSprite(150,20000,10,200);
+    denyDailyQuest = createSprite(1140,525,75,50);
     denyDailyQuest.shapeColor = "red";
 
     collectQReward = createSprite(400,250,100,50);
     collectQReward.shapeColor = "yellow";
+    collectDQreward = createSprite();
     dropQuest = createSprite(450,300,100,50);
     dropQuest.shapeColor = "red";
+    dropDailyQuest = createSprite();
     
     resetQuest = createSprite(450,350,200,50);
     resetQuest.shapeColor = "yellow";
+    resetDailyQuest = createSprite(1090,625,200,50);
+    resetDailyQuest.shapeColor = "yellow";
 
     boss = createSprite(1200,400,200,400);
     boss.addImage(bossImage);
@@ -308,7 +313,7 @@ function draw(){
         QuestButton.visible = true
         canSeeQuestButton.visible = true
         resetQuest.visible = false
-          
+        resetDailyQuest.visible = false
         transferToBoss.visible = false
         questBox1.visible = false
         questBox2.visible = false
@@ -770,6 +775,7 @@ function draw(){
         transferToBoss.visible = false
         collectQReward.visible = false
         resetQuest.visible = false
+        resetDailyQuest.visible = false
           
         boss.visible = false
         coin.visible = true
@@ -794,9 +800,9 @@ function draw(){
         dailyQuestBox3.visible = true
         dailyQuestBox4.visible = true
         acceptQuest.visible = false
-        acceptDailyQuest.visible = true
+        acceptDailyQuest.visible = false
         denyQuest.visible = false
-        denyDailyQuest.visible = true
+        denyDailyQuest.visible = false
         dropQuest.visible = false
         collectQReward.visible = false
 
@@ -814,7 +820,7 @@ function draw(){
             randomQuest = Math.round(random(1,3));
         }
         //this is for daily randomQuest = 1
-        if(randomQuest === 1 && questActive === false && questCompleted === false){
+        if(randomQuest === 1 && questActive === false && questCompleted === false && deniedQuestCooldown === 0){
             fill("white");
             text("Get a score of 1000 in a single try",350,150);
             fill("lightgreen")
@@ -825,8 +831,8 @@ function draw(){
             text("Deny?",480,250);
             fill("yellow");
             text("Reward:100 coins",400,300);
-            fill("white")
-            text("Reset Quest? 20 Coins",390,350);
+            fill("white");
+            text("Reset Quest? 20 Coins",385,350);
 
             if(mousePressedOver(resetQuest) && coins>=20 && frameCount%5 === 0){
                 coins = coins-20;
@@ -837,7 +843,9 @@ function draw(){
             if(mousePressedOver(acceptQuest) && questActive === false && frameCount%5 === 0){
                 questActive = true
             }
-            
+            if(mousePressedOver(denyQuest)){
+                deniedQuestCooldown = deniedQuestCooldown = 120;
+            }
         }
         if(questActive === true && randomQuest === 1 && questCompleted === false){
             fill("green");
@@ -881,7 +889,7 @@ function draw(){
         }
 
         //this is for randomQuest === 2
-        if(randomQuest === 2 && questActive === false){
+        if(randomQuest === 2 && questActive === false && deniedQuestCooldown === 0){
             fill("white");
             text("Get a score of 2500 in a single try",350,150);
             fill("orange")
@@ -893,7 +901,7 @@ function draw(){
             fill("yellow");
             text("Reward:200 coins",400,300);
             fill("white");
-            text("Reset Quest? 20 Coins",390,350);
+            text("Reset Quest? 20 Coins",385,350);
 
             if(mousePressedOver(resetQuest) && coins>=20 && frameCount%5 === 0){
                 coins = coins-20;
@@ -947,7 +955,7 @@ function draw(){
         }
 
         //This is for randomQuest === 3
-        if(randomQuest === 3 && questActive === false){
+        if(randomQuest === 3 && questActive === false && deniedQuestCooldown){
             fill("white");
             text("Get a score of 5000 in a single try",350,150);
             fill("red")
@@ -959,7 +967,7 @@ function draw(){
             fill("yellow");
             text("Reward:550 coins",400,300);
             fill("white");
-            text("Reset Quest? 20 Coins",390,350);
+            text("Reset Quest? 20 Coins",385,350);
 
             if(mousePressedOver(resetQuest) && coins>=20 && frameCount%5 === 0){
                 coins = coins-20;
@@ -1012,6 +1020,10 @@ function draw(){
             }
         }
 
+        if(deniedQuestCooldown!= 0){
+            text("You currently are on cooldown")
+        }
+
 
         //UNDER WORK RIGHT NOW
         // D A I L Y   Q U E S T
@@ -1025,25 +1037,22 @@ function draw(){
             fill("lightgreen");
             text("Difficulty: Easy : You shouldn't have much of a difficulty in completing this",900,475);
             fill("green");
-            text("Accept?",500,250);
+            text("Accept?",1015,525);
             fill("red");
-            text("Deny?",500,250);
+            text("Deny?",1120,525);
             fill("yellow");
-            text("Reward:200 coins",500,300);
+            text("Reward:200 coins",1040,575);
             fill("white");
-            text("Reset Quest? 50 Coins",500,350);
+            text("Reset Quest? 100 Coins",1025,625);
 
-            /*
-            if(mousePressedOver(resetDailyQuest) && coins>=20 && frameCount%5 === 0){
-                coins = coins-50;
+            if(mousePressedOver(resetDailyQuest) && coins>=100 && frameCount%5 === 0){
+                coins = coins-100;
                 dailyQuestActive = false;
                 randomDailyQuest = 0;
             }
-            
             if(mousePressedOver(acceptDailyQuest) && dailyQuestActive === false && frameCount%5 === 0){
                 questActive = true
             }
-            */
         }
         /*
         if(dailyQuestActive === true && randomDailyQuest === 1 && dailyQuestCompleted === false){
@@ -1147,6 +1156,12 @@ function draw(){
     }
     if(score%5000 === 0 && gameState === 1){
         gameState = 5
+    }
+    if(frameCount%60){
+        deniedQuestCooldown = deniedQuestCooldown-1;
+    }
+    if(frameCount%60){
+        deniedDailyQuestCooldown = deniedDailyQuestCooldown-1;
     }
     rSt.visible = false
     rDT = Math.random(round(1,4));
