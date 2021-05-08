@@ -33,7 +33,7 @@ var wSVal = 0,foodOnTheWay,randomFoodOnTheWayImage,foodOnTheWayImage,foodOnTheWa
 var dailyQuest;
 var Quest,QuestButton,questImage,canSeeQuestButton;
 var questBox1,questBox2,questBox3,questBox4,dailyQuestBox1,dailyQuestBox2,dailyQuestBox3,dailyQuestBox4,randomQuest = 0,randomDailyQuest = 0;
-var acceptQuest,denyQuest,acceptDailyQuest,denyDailyQuest,deniedQuestCooldown = 0,deniedQuestCooldownSeconds = 0,deniedQuestCooldownMinutes = 0;
+var acceptQuest,denyQuest,acceptDailyQuest,denyDailyQuest,deniedQuestCooldown = 0,deniedQuestCoolDownVariable = false,deniedQuestCooldownSeconds = 0,deniedQuestCooldownMinutes = 0;
 var deniedDailyQuestCooldown = 0,deniedDailyQuestCooldownSeconds = 0,deniedDailyQuestCooldownMinutes = 0,questActive = false,dailyQuestActive = false;
 var resetQuest,resetDailyQuest,dropQuest,dropDailyQuest,questCompleted = false,dailyQuestCompleted = false,maxCollectQuest = 0,maxCollectDailyQuest = 0,dailyQuestCompleted = true,collectQReward,collectDQreward;
 var goBack,goBackImage;
@@ -292,7 +292,9 @@ function draw(){
         boss.visible = false
         coin.visible = true
         collectQReward.visible = false
+        collectDQreward.visible = false
         dropQuest.visible = false
+        dropDailyQuest.visible = false
         box1.visible = false
         box2.visible = false
         box3.visible = false
@@ -692,7 +694,7 @@ function draw(){
         lG.setVelocityXEach(0);
         foodGroup.destroyEach();
         waterGroup.destroyEach();
-        if(mousePressedOver(restartButton && frameCount%5 === 0)){
+        if(mousePressedOver(restartButton) && frameCount%5 === 0){
             gameState = 0;
             score = 0;
         }
@@ -819,8 +821,8 @@ function draw(){
         if(questActive === false && randomQuest === 0){
             randomQuest = Math.round(random(1,3));
         }
-        //this is for daily randomQuest = 1
-        if(randomQuest === 1 && questActive === false && questCompleted === false && deniedQuestCooldown === 0){
+        //this is for randomQuest = 1
+        if(randomQuest === 1 && questActive === false && questCompleted === false && deniedQuestCooldown === 0 && deniedQuestCoolDownVariable === false){
             fill("white");
             text("Get a score of 1000 in a single try",350,150);
             fill("lightgreen")
@@ -843,8 +845,9 @@ function draw(){
             if(mousePressedOver(acceptQuest) && questActive === false && frameCount%5 === 0){
                 questActive = true
             }
-            if(mousePressedOver(denyQuest)){
+            if(mousePressedOver(denyQuest) && deniedQuestCoolDownVariable === false){
                 deniedQuestCooldown = deniedQuestCooldown = 120;
+                deniedQuestCoolDownVariable = true
             }
         }
         if(questActive === true && randomQuest === 1 && questCompleted === false){
@@ -889,7 +892,7 @@ function draw(){
         }
 
         //this is for randomQuest === 2
-        if(randomQuest === 2 && questActive === false && deniedQuestCooldown === 0){
+        if(randomQuest === 2 && questActive === false && deniedQuestCooldown === 0 && deniedQuestCoolDownVariable === false){
             fill("white");
             text("Get a score of 2500 in a single try",350,150);
             fill("orange")
@@ -910,6 +913,10 @@ function draw(){
             }
             if(mousePressedOver(acceptQuest) && questActive === false && frameCount%5 === 0){
                 questActive = true
+            }
+            if(mousePressedOver(denyQuest) && deniedQuestCoolDownVariable === false){
+                deniedQuestCooldown = deniedQuestCooldown = 120;
+                deniedQuestCoolDownVariable = true
             }
         }
 
@@ -955,7 +962,7 @@ function draw(){
         }
 
         //This is for randomQuest === 3
-        if(randomQuest === 3 && questActive === false && deniedQuestCooldown){
+        if(randomQuest === 3 && questActive === false && deniedQuestCooldown === 0 && deniedQuestCoolDownVariable === false){
             fill("white");
             text("Get a score of 5000 in a single try",350,150);
             fill("red")
@@ -976,6 +983,10 @@ function draw(){
             }
             if(mousePressedOver(acceptQuest) && questActive === false && frameCount%5 === 0){
                 questActive = true
+            }
+            if(mousePressedOver(denyQuest) && deniedQuestCoolDownVariable === false){
+                deniedQuestCooldown = deniedQuestCooldown = 120;
+                deniedQuestCoolDownVariable = true
             }
         }
 
@@ -1021,7 +1032,7 @@ function draw(){
         }
 
         if(deniedQuestCooldown!= 0){
-            text("You currently are on cooldown")
+            text("You currently are on cooldown, Remaining time = "+deniedQuestCooldownMinutes+" Minutes "+deniedQuestCooldownSeconds+" Seconds",255,250)
         }
 
 
@@ -1033,7 +1044,7 @@ function draw(){
         //this is for daily randomQuest = 1
         if(randomDailyQuest === 1 && dailyQuestActive === false){
             fill("white");
-            text("Collect 5 foods while running",1020,425);
+            text("Collect 7 foods while running",1020,425);
             fill("lightgreen");
             text("Difficulty: Easy : You shouldn't have much of a difficulty in completing this",900,475);
             fill("green");
@@ -1041,7 +1052,7 @@ function draw(){
             fill("red");
             text("Deny?",1120,525);
             fill("yellow");
-            text("Reward:200 coins",1040,575);
+            text("Reward:300 coins",1040,575);
             fill("white");
             text("Reset Quest? 100 Coins",1025,625);
 
@@ -1051,30 +1062,31 @@ function draw(){
                 randomDailyQuest = 0;
             }
             if(mousePressedOver(acceptDailyQuest) && dailyQuestActive === false && frameCount%5 === 0){
-                questActive = true
+                dailyQuestActive = true
             }
         }
-        /*
         if(dailyQuestActive === true && randomDailyQuest === 1 && dailyQuestCompleted === false){
             fill("green");
-            text("Ongoing quest",410,150);
+            text("Ongoing Daily quest",1035,425);
             fill("white")
-            text("Get a score of 1000 in a single try",360,200);
+            text("Get a score of 1000 in a single try",1020,475);
             fill("lightgreen");
-            text("Difficulty: Easy : You shouldn't have much of a difficulty in completing this",260,250);
+            text("Difficulty: Easy : You shouldn't have much of a difficulty in completing this",990,525);
             fill("red");
-            text("Drop quest? (pay 30 coins)",375,300);
-
-            if(mousePressedOver(dropDailyQuest) && coins>=30 && frameCount%5 === 0){
-                coins = coins-20;
-                randomQuest = 0;
-                questActive = false;
+            text("Drop quest? (pay 120 coins)",2030,575);
+/*
+            if(mousePressedOver(dropDailyQuest) && coins>=120 && frameCount%5 === 0){
+                coins = coins-120;
+                randomDailyQuest = 0;
+                dailyQuestActive = false;
             }
-            if(foodPressedCount>=5){
-                questActive = true
-                questCompleted = true
+            if(foodPressedCount>=7){
+                dailyQuestActive = true
+                dailyQuestCompleted = true
             }
+            */
         }
+        /*
         if(questActive === true && questCompleted === true && randomQuest === 1){
             fill("green");
             text("Quest Completed!",410,150);
@@ -1154,22 +1166,20 @@ function draw(){
     if(waterStock>5){
         waterStock = 5
     }
+    /*
     if(score%5000 === 0 && gameState === 1){
         gameState = 5
     }
-    if(frameCount%60){
-        deniedQuestCooldown = deniedQuestCooldown-1;
-    }
-    if(frameCount%60){
-        deniedDailyQuestCooldown = deniedDailyQuestCooldown-1;
-    }
+    */
+    
+    deniedQuestFunction();
     rSt.visible = false
     rDT = Math.random(round(1,4));
     randX = Math.round(random(1,3));
     randY = Math.round(random(1,3));
     drawSprites();
     ast.display();
-    //console.log(rand);
+    //console.log(randomQuest);
 }
 
 function spawnEnemy(){
@@ -1707,6 +1717,33 @@ function youreDead(){
     }
 }
 
+function deniedQuestFunction(){
+    if(frameCount%60 === 0){
+        deniedQuestCooldown = deniedQuestCooldown-1;
+    }
+    if(deniedQuestCoolDownVariable === false){
+        deniedQuestCooldown = 0;
+    }
+    deniedQuestCooldownSeconds = deniedQuestCooldown;
+    if(deniedQuestCooldown>60){
+        deniedQuestCooldownSeconds = deniedQuestCooldownSeconds-60
+    }
+    if(deniedQuestCooldown<60){
+        deniedQuestCooldownMinutes = 0
+    }
+    if(deniedQuestCooldown>=60){
+        deniedQuestCooldownMinutes = 1
+    }
+    if(deniedQuestCooldownSeconds<=-1){
+        deniedQuestCooldownSeconds = deniedQuestCooldownSeconds+60;
+        deniedQuestCooldownMinutes = deniedQuestCooldownMinutes-1;
+    }
+    if(deniedQuestCooldown===0){
+        deniedQuestCoolDownVariable = false
+    }
+    
+}
+
 function preventOverMovement(){
     //prevent from going up
     if(astpos.y>575){
@@ -1798,6 +1835,7 @@ function preventOverMovement(){
         ahB6.x = 1536;
     }   
 }
+
 //being worked on
 function theBossCanFightLol(){
     //lazer1 = createSprite
