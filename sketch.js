@@ -26,18 +26,18 @@ var emI;
 var dRG;
 var coins = 50,coinImage,coin,maxCoinMulti = 0;
 var gems = 0,gemImage;
-var Shop,ShopImage,canSeeShop;
+var Shop,ShopImage;
 var lSVal = 0;
 var fSVal = 0,waterOnTheWay,waterOnTheWayImage;
 var wSVal = 0,foodOnTheWay,randomFoodOnTheWayImage,foodOnTheWayImage,foodOnTheWayImage2,foodOnTheWayImage3,foodOnTheWayImage4;
 var dailyQuest;
-var Quest,QuestButton,questImage,canSeeQuestButton;
+var Quest,QuestButton,questImage;
 var questBox1,questBox2,questBox3,questBox4,dailyQuestBox1,dailyQuestBox2,dailyQuestBox3,dailyQuestBox4,randomQuest = 0,randomDailyQuest = 0;
 var acceptQuest,denyQuest,acceptDailyQuest,denyDailyQuest,deniedQuestCooldown = 0,deniedQuestCoolDownVariable = false,deniedQuestCooldownSeconds = 0,deniedQuestCooldownMinutes = 0;
 var deniedDailyQuestCooldown = 0,deniedDailyQuestCooldownSeconds = 0,deniedDailyQuestCooldownMinutes = 0,questActive = false,dailyQuestActive = false;
-var resetQuest,resetDailyQuest,dropQuest,dropDailyQuest,questCompleted = false,dailyQuestCompleted = false,maxCollectQuest = 0,maxCollectDailyQuest = 0,dailyQuestCompleted = true,collectQReward,collectDQreward;
+var resetQuest,resetDailyQuest,dropQuest,dropDailyQuest,questCompleted = false,dailyQuestCompleted = false,maxCollectQuest = 0,maxCollectDailyQuest = 0,dailyQuestCompleted = false,collectQReward,collectDQreward;
 var goBack,goBackImage;
-var halp,helpImage,canSeeHelp;
+var halp,helpImage;
 var halpval = 0;
 var box1,box2,box3,box4,box5,box6,box7,box8,box9,box10,box11,box12,box13,box14,box15,box16;
 var CoinBuyStuff1,CoinBuyStuff2,CoinBuyStuff3,CoinBuyStuff4;
@@ -151,16 +151,11 @@ function setup(){
     restartButton = createSprite(768,361,50,50);
     rSt = createSprite(1525,10,25,25);
 
-    canSeeHelp = createSprite(250,25,50,50);
-    canSeeHelp.shapeColor = "white";
     halp = createSprite(250,25,50,50);
     halp.addImage(helpImage);
-    halp.scale = 0.1;
-    canSeeShop = createSprite(25,25,50,50);
-    canSeeShop.shapeColor = "white";
     Shop = createSprite(25,25,50,50);
     Shop.addImage(ShopImage);
-    Shop.scale = 0.2;
+    Shop.scale = 0.12;
     coin = createSprite(1450,35,5,5);
     coin.addImage(coinImage);
     coin.scale = 0.1;
@@ -225,8 +220,6 @@ function setup(){
     goBack.addImage(goBackImage);
     goBack.scale = 0.15
 
-    canSeeQuestButton = createSprite(25,100,50,50);
-    canSeeQuestButton.shapeColor = "white";
     QuestButton = createSprite(25,100,50,50);
     QuestButton.shapeColor = "white";
     QuestButton.addImage(questImage);
@@ -250,22 +243,24 @@ function setup(){
     dailyQuestBox4 = createSprite(1095,675,600,10);
     dailyQuestBox4.shapeColor = "white";
     
-    acceptQuest = createSprite(400,250,75,50);
+    acceptQuest = createSprite(405,250,75,50);
     acceptQuest.shapeColor = "green";
-    acceptDailyQuest = createSprite(1030,525,75,50);
+    acceptDailyQuest = createSprite(1035,525,75,50);
     acceptDailyQuest.shapeColor = "green";
 
-    denyQuest = createSprite(500,250,75,50);
+    denyQuest = createSprite(495,250,75,50);
     denyQuest.shapeColor = "red";
-    denyDailyQuest = createSprite(1140,525,75,50);
+    denyDailyQuest = createSprite(1135,525,75,50);
     denyDailyQuest.shapeColor = "red";
 
-    collectQReward = createSprite(400,250,100,50);
+    collectQReward = createSprite(400,250,100,25);
     collectQReward.shapeColor = "yellow";
-    collectDQreward = createSprite();
-    dropQuest = createSprite(450,300,100,50);
+    collectDQreward = createSprite(1100,525,150,25);
+    collectDQreward.shapeColor = "yellow";
+    dropQuest = createSprite(450,300,100,5250);
     dropQuest.shapeColor = "red";
-    dropDailyQuest = createSprite();
+    dropDailyQuest = createSprite(1105,575,150,25);
+    dropDailyQuest.shapeColor = "red";
     
     resetQuest = createSprite(450,350,200,50);
     resetQuest.shapeColor = "yellow";
@@ -288,7 +283,6 @@ function draw(){
     if(gameState === 0){
         background(bgG0);
         ground.visible = true
-        canSeeShop.visible = true
         boss.visible = false
         coin.visible = true
         collectQReward.visible = false
@@ -311,9 +305,7 @@ function draw(){
         box14.visible = false
         box15.visible = false
         box16.visible = false
-        canSeeHelp.visible = true
         QuestButton.visible = true
-        canSeeQuestButton.visible = true
         resetQuest.visible = false
         resetDailyQuest.visible = false
         transferToBoss.visible = false
@@ -493,14 +485,11 @@ function draw(){
 
     if(gameState === 1){
         background(bgG1);
-        canSeeShop.visible = false
         transferToBoss.visible = false
         halp.visible = false
         ground.visible = true
         coin.visible = false
-        canSeeHelp.visible = false
         QuestButton.visible = false
-        canSeeQuestButton.visible = false
         boss.visible = false
           
         questBox1.visible = false
@@ -680,16 +669,13 @@ function draw(){
     if(gameState === 2){
         dropQuest.visible = false
         rc.visible = false
-        canSeeShop.visible = false
           
         Shop.visible = false
         transferToBoss.visible = false
         restartButton.visible = true;
         collectQReward.visible = false
         halp.visible = false
-        canSeeHelp.visible = false
         QuestButton.visible = false
-        canSeeQuestButton.visible = false
         boss.visible = false
         lG.setVelocityXEach(0);
         foodGroup.destroyEach();
@@ -719,12 +705,9 @@ function draw(){
         background("black");
         dropQuest.visible = false
         restartButton.visible = false
-        canSeeShop.visible = false
         startButton.visible = false
-        canSeeHelp.visible = false
         QuestButton.visible = false
-        canSeeQuestButton.visible = false
-          
+        
         boss.visible = false
         rc.visible = false
         fm.visible = false
@@ -738,7 +721,7 @@ function draw(){
         ground.visible = false
         transferToBoss.visible = false
         halp.visible = false
-
+        
         questBox1.visible = false
         questBox2.visible = false
         questBox3.visible = false
@@ -769,16 +752,13 @@ function draw(){
     if(gameState === 4){
         background("black");
         restartButton.visible = false
-        canSeeShop.visible = false
         startButton.visible = false
-        canSeeHelp.visible = false
         QuestButton.visible = false
-        canSeeQuestButton.visible = false
         transferToBoss.visible = false
         collectQReward.visible = false
         resetQuest.visible = false
         resetDailyQuest.visible = false
-          
+        dropDailyQuest.visible = false
         boss.visible = false
         coin.visible = true
         rc.visible = false
@@ -871,11 +851,11 @@ function draw(){
             }
         }
         if(questActive === true && questCompleted === true && randomQuest === 1){
-            fill("green");
-            text("Quest Completed!",410,150);
             fill("white");
-            text("Get a score of 1000 in a single try",360,200);
+            text("Quest Completed!",410,150);
             fill("lightgreen");
+            text("Get a score of 1000 in a single try",360,200);
+            fill("green");
             text("Collect Your reward here",400,250);
             if(mousePressedOver(collectQReward) && maxCollectQuest === 0 && frameCount%5 === 0){
                 coins = coins+100;  
@@ -941,11 +921,11 @@ function draw(){
             }
         }
         if(questActive === true && questCompleted === true && randomQuest === 2){
-            fill("green");
-            text("Quest Completed!",410,150);
             fill("white");
-            text("Get a score of 2500 in a single try",360,200);
+            text("Quest Completed!",410,150);
             fill("lightgreen");
+            text("Get a score of 2500 in a single try",360,200);
+            fill("green");
             text("Collect Your reward here",400,250);
             if(mousePressedOver(collectQReward) && maxCollectQuest === 0 && frameCount%5 === 0){
                 coins = coins+200;  
@@ -1011,11 +991,11 @@ function draw(){
             }
         }
         if(questActive === true && questCompleted === true && randomQuest === 3){
-            fill("green");
-            text("Quest Completed!",410,150);
             fill("white");
-            text("Get a score of 5000 in a single try",360,200);
+            text("Quest Completed!",410,150);
             fill("lightgreen");
+            text("Get a score of 5000 in a single try",360,200);
+            fill("green");
             text("Collect Your reward here",400,250);
             if(mousePressedOver(collectQReward) && maxCollectQuest === 0 && frameCount%5 === 0){
                 coins = coins+550;  
@@ -1039,10 +1019,10 @@ function draw(){
         //UNDER WORK RIGHT NOW
         // D A I L Y   Q U E S T
         if(dailyQuestActive === false && randomDailyQuest === 0){
-            randomDailyQuest = 1 //Math.round(random(1,4));
+            randomDailyQuest = 2 //Math.round(random(1,4));
         }
         //this is for daily randomQuest = 1
-        if(randomDailyQuest === 1 && dailyQuestActive === false){
+        if(randomDailyQuest === 1 && dailyQuestActive === false && dailyQuestCompleted === false){
             fill("white");
             text("Collect 7 foods while running",1020,425);
             fill("lightgreen");
@@ -1069,12 +1049,12 @@ function draw(){
             fill("green");
             text("Ongoing Daily quest",1035,425);
             fill("white")
-            text("Get a score of 1000 in a single try",1020,475);
+            text("Collect 7 foods while running",1020,475);
             fill("lightgreen");
-            text("Difficulty: Easy : You shouldn't have much of a difficulty in completing this",990,525);
+            text("Difficulty: Easy : You shouldn't have much of a difficulty in completing this",900,525);
             fill("red");
-            text("Drop quest? (pay 120 coins)",2030,575);
-/*
+            text("Drop quest? (Pay 120 coins)",1030,575);
+
             if(mousePressedOver(dropDailyQuest) && coins>=120 && frameCount%5 === 0){
                 coins = coins-120;
                 randomDailyQuest = 0;
@@ -1084,18 +1064,19 @@ function draw(){
                 dailyQuestActive = true
                 dailyQuestCompleted = true
             }
-            */
+
         }
-        /*
-        if(questActive === true && questCompleted === true && randomQuest === 1){
+
+        if(dailyQuestActive === true && dailyQuestCompleted === true && randomDailyQuest === 1){
             fill("green");
-            text("Quest Completed!",410,150);
+            text("Daily Quest Completed!",1030,425);
             fill("white");
-            text("Get a score of 1000 in a single try",360,200);
+            text("Collect 7 foods while running",1020,475);
             fill("lightgreen");
-            text("Collect Your reward here",400,250);
+            text("Collect Your reward here",1030,525);
+
             if(mousePressedOver(collectDQreward) && maxCollectDailyQuest === 0 && frameCount%5 === 0){
-                coins = coins+100;  
+                coins = coins+300;  
                 maxCollectDailyQuest = 1
             }
         }
@@ -1105,9 +1086,78 @@ function draw(){
                 dailyQuestActive = false
                 dailyQuestCompleted = false
                 maxCollectDailyQuest = 0;
+                foodPressedCount = 0;
             }
         }
-        */
+
+        //this is for daily randomQuest = 2
+        if(randomDailyQuest === 2 && dailyQuestActive === false && dailyQuestCompleted === false){
+            fill("white");
+            text("Collect 15 foods while running",1020,425);
+            fill("orange");
+            text("Difficulty: Hard : Not that hard but not easy either",970,475);
+            fill("green");
+            text("Accept?",1015,525);
+            fill("red");
+            text("Deny?",1120,525);
+            fill("yellow");
+            text("Reward:300 coins",1040,575);
+            fill("white");
+            text("Reset Quest? 100 Coins",1025,625);
+
+            if(mousePressedOver(resetDailyQuest) && coins>=100 && frameCount%5 === 0){
+                coins = coins-100;
+                dailyQuestActive = false;
+                randomDailyQuest = 0;
+            }
+            if(mousePressedOver(acceptDailyQuest) && dailyQuestActive === false && frameCount%5 === 0){
+                dailyQuestActive = true
+            }
+        }
+        if(dailyQuestActive === true && randomDailyQuest === 2 && dailyQuestCompleted === false){
+            fill("green");
+            text("Ongoing Daily quest",1035,425);
+            fill("white")
+            text("Collect 15 foods while running",1020,475);
+            fill("orange");
+            text("Difficulty: Medium : Not that hard but not easy either",970,525);
+            fill("red");
+            text("Drop quest? (Pay 120 coins)",1030,575);
+
+            if(mousePressedOver(dropDailyQuest) && coins>=120 && frameCount%5 === 0){
+                coins = coins-120;
+                randomDailyQuest = 0;
+                dailyQuestActive = false;
+            }
+            if(foodPressedCount>=15){
+                dailyQuestActive = true
+                dailyQuestCompleted = true
+            }
+
+        }
+
+        if(dailyQuestActive === true && dailyQuestCompleted === true && randomDailyQuest === 2){
+            fill("green");
+            text("Daily Quest Completed!",1030,425);
+            fill("orange");
+            text("Collect 15 foods while running",1020,475);
+            fill("lightgreen");
+            text("Collect Your reward here",1030,525);
+
+            if(mousePressedOver(collectDQreward) && maxCollectDailyQuest === 0 && frameCount%5 === 0){
+                coins = coins+300;  
+                maxCollectDailyQuest = 1
+            }
+        }
+        if(maxCollectDailyQuest === 1){
+                if(frameCount%2 === 0){
+                randomDailyQuest = 0;
+                dailyQuestActive = false
+                dailyQuestCompleted = false
+                maxCollectDailyQuest = 0;
+                foodPressedCount = 0;
+            }
+        }
         
         fill("white")
         text("Daily quest every 6:30am GMT",670,50);
@@ -1119,14 +1169,11 @@ function draw(){
     if(gameState === 5){
         background(bossBackground);
         boss.visible = true
-        canSeeShop.visible = false
         transferToBoss.visible = true
         halp.visible = false
         ground.visible = true
         coin.visible = false
-        canSeeHelp.visible = false
         QuestButton.visible = false
-        canSeeQuestButton.visible = false
           
         questBox1.visible = false
         questBox2.visible = false
@@ -1718,7 +1765,7 @@ function youreDead(){
 }
 
 function deniedQuestFunction(){
-    if(frameCount%60 === 0){
+    if(frameCount%30 === 0){
         deniedQuestCooldown = deniedQuestCooldown-1;
     }
     if(deniedQuestCoolDownVariable === false){
