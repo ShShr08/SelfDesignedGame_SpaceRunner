@@ -21,22 +21,23 @@ var score = 0,highScore = 0;
 var randX,randY,rand = 0;
 var foodGroup;
 var waterGroup;
-var restartButton,restartButtonImage;
+var restartButton,restartButtonImage,rDT = 0;
 var emI;
 var dRG;
 var coins = 50,coinImage,coin,maxCoinMulti = 0;
-var gems = 0,gemImage;
+var gems = 0,gemImage,gem;
 var Shop,ShopImage;
 var lSVal = 0;
 var fSVal = 0,waterOnTheWay,waterOnTheWayImage;
 var wSVal = 0,foodOnTheWay,randomFoodOnTheWayImage,foodOnTheWayImage,foodOnTheWayImage2,foodOnTheWayImage3,foodOnTheWayImage4;
 var dailyQuest;
+var shopPage = 1,shopPage2Image,shopPage2Sprite,pileOfGems,pileOfGemsImage;
 var Quest,QuestButton,questImage,dailyQuestDecoration,dailyQuestDecoration2,dailyQuestDecoration3,dailyQuestDecoration4,randomDailyQuestDecoration = 0;
 var questBox1,questBox2,questBox3,questBox4,dailyQuestBox1,dailyQuestBox2,dailyQuestBox3,dailyQuestBox4,randomQuest = 0,randomDailyQuest = 0;
 var acceptQuest,denyQuest,acceptDailyQuest,denyDailyQuest,deniedQuestCooldown = 0,deniedQuestCoolDownVariable = false,deniedQuestCooldownSeconds = 0,deniedQuestCooldownMinutes = 0;
 var deniedDailyQuestCooldown = 0,deniedDailyQuestCooldownSeconds = 0,deniedDailyQuestCooldownMinutes = 0,questActive = false,dailyQuestActive = false;
 var resetQuest,resetDailyQuest,dropQuest,dropDailyQuest,questCompleted = false,dailyQuestCompleted = false,maxCollectQuest = 0,maxCollectDailyQuest = 0,dailyQuestCompleted = false,collectQReward,collectDQreward;
-var goBack,goBackImage;
+var goBack,goBackImage,goNextPage,goNextPageImage;
 var halp,helpImage;
 var halpval = 0;
 var box1,box2,box3,box4,box5,box6,box7,box8,box9,box10,box11,box12,box13,box14,box15,box16;
@@ -80,7 +81,11 @@ function preload(){
     foodOnTheWayImage2 = loadImage("images/FoodImage2.png");
     foodOnTheWayImage3 = loadImage("images/FoodImage3.png");
     foodOnTheWayImage4 = loadImage("images/FoodImage4.png");
-    restartButtonImage = loadImage("images/RestartButtonImage.png")
+    restartButtonImage = loadImage("images/RestartButtonImage.png");
+    gemImage = loadImage("images/PurpGemImage.png");
+    goNextPageImage = loadImage("images/goNext.png");
+    shopPage2Image = loadImage("images/ShopPage2Image.png");
+    pileOfGemsImage = loadImage("images/PileOfGems.png");
 }
 
 
@@ -150,6 +155,8 @@ function setup(){
     startButton.addImage(startButtonImage);
     startButton.scale = 0.2
     restartButton = createSprite(768,361,50,50);
+    restartButton.addImage(restartButtonImage);
+    restartButton.scale = 0.2
     rSt = createSprite(1525,10,25,25);
 
     halp = createSprite(250,25,50,50);
@@ -161,6 +168,9 @@ function setup(){
     coin = createSprite(1450,35,5,5);
     coin.addImage(coinImage);
     coin.scale = 0.1;
+    gem = createSprite(1450,70,5,5);
+    gem.addImage(gemImage);
+    gem.scale = 0.06;
 
     box1 = createSprite(100,150,10,126);
     box1.shapeColor = "white";
@@ -220,7 +230,10 @@ function setup(){
 
     goBack = createSprite(30,692,20,20);
     goBack.addImage(goBackImage);
-    goBack.scale = 0.15
+    goBack.scale = 0.15;
+    goNextPage = createSprite(1506,692,20,20);
+    goNextPage.addImage(goNextPageImage);
+    goNextPage.scale = 0.15;
 
     QuestButton = createSprite(25,100,50,50);
     QuestButton.shapeColor = "white";
@@ -287,7 +300,13 @@ function setup(){
     transferToBoss = createSprite(153,361,5,1536);
     transferToBoss.shapeColor = "red";
 
-    Shop.visible = false
+    shopPage2Sprite = createSprite(500,550,1536,350);
+    shopPage2Sprite.addImage(shopPage2Image);
+    shopPage2Sprite.scale = 1.5;
+    pileOfGems = createSprite(1100,650,150,200);
+    pileOfGems.addImage(pileOfGemsImage);
+    pileOfGems.scale = 1.2
+
     lG = new Group();
     foodGroup = new Group();
     waterGroup = new Group();
@@ -340,21 +359,19 @@ function draw(){
         acceptDailyQuest.visible = false
         denyQuest.visible = false
         denyDailyQuest.visible = false
-
+        shopPage2Sprite.visible = false
+        pileOfGems.visible = false
         rc.visible = true
-
         buy1.visible = false
         buy2.visible = false
         buy3.visible = false
         buy4.visible = false
-
         CoinBuyStuff1.visible = false
         CoinBuyStuff2.visible = false
         CoinBuyStuff3.visible = false
         CoinBuyStuff4.visible = false
-
         goBack.visible = false
-
+        goNextPage.visible = false
         astpos.x = 300
         astpos.y = 575
         ahB.x = 365;
@@ -380,6 +397,7 @@ function draw(){
         ahB.collide(ground);
         restartButton.visible = false
         text(" "+coins,1460,40);
+        text("  "+gems,1460,75);
         if(foodStock >8 || foodStock ===8){
             fill("darkgreen");
             text("Food supply = "+foodStock,1125,500);
@@ -505,12 +523,14 @@ function draw(){
     if(gameState === 1){
         background(bgG1);
         transferToBoss.visible = false
+        rDT = 0;
         halp.visible = false
         ground.visible = true
         coin.visible = false
         QuestButton.visible = false
         boss.visible = false
-          
+        shopPage2Sprite.visible = false
+        pileOfGems.visible = false
         questBox1.visible = false
         questBox2.visible = false
         dropQuest.visible = false
@@ -529,7 +549,7 @@ function draw(){
         fill("white");
         textSize = 13;
         text("Score : "+score,1387,30);
-        text("Food Remaining =",1387,60);        
+        text("Food Remaining =",1387,60); 
         if(foodStock >8 || foodStock ===8){
             stroke("lightgreen");
             fill("darkgreen");
@@ -546,12 +566,12 @@ function draw(){
             text(" "+foodStock,1500,60);
         }
         if(foodStock >2 && foodStock<4 || foodStock === 2){
-            stroke("lightorange")
+            stroke("lightorange");
             fill("orange");
             text(" "+foodStock,1500,60);
         }
         if(foodStock <2 || foodStock === 0){
-            stroke("lightred")
+            stroke("lightred");
             fill("red");
             text(" "+foodStock,1500,60);
         }
@@ -688,11 +708,15 @@ function draw(){
     }
 
 
+    if(rDT === 0){
+        rDT = Math.round(random(1,4));
+    }
 
     if(gameState === 2){
         dropQuest.visible = false
         rc.visible = false
-          
+        shopPage2Sprite.visible = false
+        pileOfGems.visible = false
         Shop.visible = false
         transferToBoss.visible = false
         restartButton.visible = true;
@@ -703,25 +727,24 @@ function draw(){
         lG.setVelocityXEach(0);
         foodGroup.destroyEach();
         waterGroup.destroyEach();
+        noStroke();
         if(mousePressedOver(restartButton) && frameCount%5 === 0){
             gameState = 0;
             score = 0;
         }
-        /*
-        textSize(15);
+        fill("turquoise");
         if(rDT === 1){
-            text("well you could have done much better",740,350);
+            text("well you could have done much better",650,320);
         }
         if(rDT === 2){
-            text("Nice start, you're doing better",745,350);
+            text("Nice start, you're doing better",680,320);
         }
         if(rDT === 3){
-            text("Try to not make that misate again",739,350);
+            text("Try to not make that mistake again",665,320);
         }
         if(rDT === 4){
-            text("Predict your and the lazer's movements",740,350)
+            text("Predict your and the lazer's movements",650,320)
         }
-        */
     }
 
     if(gameState === 3){
@@ -730,7 +753,8 @@ function draw(){
         restartButton.visible = false
         startButton.visible = false
         QuestButton.visible = false
-        
+        shopPage2Sprite.visible = false
+        pileOfGems.visible = false
         boss.visible = false
         rc.visible = false
         fm.visible = false
@@ -744,7 +768,6 @@ function draw(){
         ground.visible = false
         transferToBoss.visible = false
         halp.visible = false
-        
         questBox1.visible = false
         questBox2.visible = false
         questBox3.visible = false
@@ -761,12 +784,20 @@ function draw(){
         
         fill("white")
         text(" "+coins,1460,40);
-        fill("yellow");
-        text("Upgrades = ",450,450);
-        fill("white");
-        text("Lazer "+lSVal,450,500);
-        text("Food "+fSVal,450,550);
-        text("Water "+wSVal,450,600);
+        text("  "+gems,1460,75);
+
+        if(shopPage === 1){
+            fill("yellow");
+            text("Upgrades = ",450,450);
+            fill("white");
+            text("Lazer "+lSVal,450,500);
+            text("Food "+fSVal,450,550);
+            text("Water "+wSVal,450,600);
+        }
+        if(shopPage === 2){
+            shopPage2Sprite.visible = true
+            pileOfGems.visible = true
+        }
 
         coin.visible = true
         buyStuff();
@@ -796,6 +827,7 @@ function draw(){
         ground.visible = false
         halp.visible = false
         goBack.visible = true
+        goNextPage.visible = false
         questBox1.visible = true
         questBox2.visible = true
         questBox3.visible = true
@@ -816,6 +848,7 @@ function draw(){
 
         fill("white")
         text(" "+coins,1460,40);
+        text("  "+gems,1460,75);
 
         if(randomDailyQuestDecoration == 0){
             randomDailyQuestDecoration = Math.round(random(1,3));
@@ -1415,7 +1448,6 @@ function draw(){
     
     deniedQuestFunction();
     rSt.visible = false
-    rDT = Math.random(round(1,4));
     randX = Math.round(random(1,3));
     randY = Math.round(random(1,3));
     drawSprites();
@@ -1725,117 +1757,165 @@ function getSupplies(){
 }
 
 function buyStuff(){
-    box1.visible = true
-    box2.visible = true
-    box3.visible = true
-    box4.visible = true
-    box5.visible = true
-    box6.visible = true
-    box7.visible = true
-    box8.visible = true
-    box9.visible = true
-    box10.visible = true
-    box11.visible = true
-    box12.visible = true
-    box13.visible = true
-    box14.visible = true
-    box15.visible = true
-    box16.visible = true
+    if(shopPage === 1){
+        box1.visible = true
+        box2.visible = true
+        box3.visible = true
+        box4.visible = true
+        box5.visible = true
+        box6.visible = true
+        box7.visible = true
+        box8.visible = true
+        box9.visible = true
+        box10.visible = true
+        box11.visible = true
+        box12.visible = true
+        box13.visible = true
+        box14.visible = true
+        box15.visible = true
+        box16.visible = true
 
-    buy1.visible = true
-    buy2.visible = true
-    buy3.visible = true
-    buy4.visible = true
+        buy1.visible = true
+        buy2.visible = true
+        buy3.visible = true
+        buy4.visible = true
 
-    CoinBuyStuff1.visible = true
-    CoinBuyStuff2.visible = true
-    CoinBuyStuff3.visible = true
-    CoinBuyStuff4.visible = true
+        CoinBuyStuff1.visible = true
+        CoinBuyStuff2.visible = true
+        CoinBuyStuff3.visible = true
+        CoinBuyStuff4.visible = true
 
-    goBack.visible = true
-    //Pt1
-    if(mousePressedOver(buy1) && coins>=50 && lSVal<7 && frameCount%3 === 0){
-        coins = coins-50; 
-        lSVal = lSVal+1
-    }
-    if(mousePressedOver(buy1) && coins<50 && lSVal <7){
-        text("Try purchasing this once you have more money",125,250);
-    }
-    if(mousePressedOver(buy1) && lSVal === 7){
-        text("You have purchased the maximum you can!",130,250);
-    }
+        astpos.x = 300
+        astpos.y = 575
+
+        goBack.visible = true
+        goNextPage.visible = true
+        //Pt1
+        if(mousePressedOver(buy1) && coins>=50 && lSVal<7 && frameCount%3 === 0){
+            coins = coins-50; 
+            lSVal = lSVal+1
+        }
+        if(mousePressedOver(buy1) && coins<50 && lSVal <7){
+            text("Try purchasing this once you have more money",125,250);
+        }
+        if(mousePressedOver(buy1) && lSVal === 7){
+            text("You have purchased the maximum you can!",130,250);
+        }
     
-    coin.visible = true
+        coin.visible = true
 
-    fill("red");
-    text("Lazer Speed",115,120);
-    fill("pink")
-    text("Reduces the lazer's speed, making",115,150);
-    text("the game much more easier!",115,180);
-    fill("white")
-    text("Price =       50 coins",200,120);
+        fill("red");
+        text("Lazer Speed",115,120);
+        fill("pink")
+        text("Reduces the lazer's speed, making",115,150);
+        text("the game much more easier!",115,180);
+        fill("white")
+        text("Price =       50 coins",200,120);
 
-    //Pt2
-    if(mousePressedOver(buy2) && coins>=100 && fSVal<7 && frameCount%3 === 0){
-        coins = coins-100; 
-        fSVal = fSVal+1
+        //Pt2
+        if(mousePressedOver(buy2) && coins>=100 && fSVal<7 && frameCount%3 === 0){
+            coins = coins-100; 
+            fSVal = fSVal+1
+        }
+        if(mousePressedOver(buy2) && coins<100 && fSVal<7){
+            text("Try purchasing this once you have more money",625,250);
+        }
+        if(mousePressedOver(buy2) && fSVal === 7){
+            text("You have purchased the maximum you can!",630,250);
+        }
+
+        fill("orange");
+        text("Food Speed",615,120);
+        fill("yellow")
+        text("Reduces the food's speed, collecting",615,150);
+        text("food has never been easier!",615,180);
+        fill("white")
+        text("Price =       100 coins",700,120);
+
+        //Pt3
+        if(mousePressedOver(buy3) && coins>=100 && wSVal<7 && frameCount%3 === 0){
+            coins = coins-100; 
+            wSVal = wSVal+1
+        }
+        if(mousePressedOver(buy3) && coins<100 && wSVal<7){
+            text("Try purchasing this once you have more money",1125,250);
+        }
+        if(mousePressedOver(buy3) && wSVal === 7){
+            text("You have purchased the maximum you can!",1130,250);
+        }
+
+        fill("blue");
+        text("Water Speed",1115,120);
+        fill("lightblue")
+        text("Reduces the water's speed, collecting",1115,150);
+        text("water has never been easier!",1115,180);
+        fill("white");
+        text("Price =       100 coins",1200,120);
+
+        //Pt4
+        fill("yellow");
+        text("Double Score!",115,320);
+        fill("yellow")
+        text("Doubles your score, this has",115,350);
+        text("positive and negative results!",115,380);
+        fill("white")
+        text("Price =       1000 coins",200,320);
+
+        if(mousePressedOver(buy4) && coins>=1000 && maxCoinMulti === 0 && frameCount%3 === 0){
+            coins = coins-1000; 
+            maxCoinMulti = maxCoinMulti+1
+        }
+        if(mousePressedOver(buy4) && maxCoinMulti === 1){
+            text("You have purchased the maximum you can",130,450);
+        }
+
+
+        //go to next page
+        if(mousePressedOver(goNextPage) && gameState === 3 && frameCount%3 === 0){
+            shopPage = 2
+        }
+        //go back to gameState 0
+        if(mousePressedOver(goBack) && gameState === 3 && frameCount%3 === 0){
+            gameState = 0
+        }
     }
-    if(mousePressedOver(buy2) && coins<100 && fSVal<7){
-        text("Try purchasing this once you have more money",625,250);
-    }
-    if(mousePressedOver(buy2) && fSVal === 7){
-        text("You have purchased the maximum you can!",630,250);
-    }
+    else if(shopPage === 2){
+        box1.visible = false
+        box2.visible = false
+        box3.visible = false
+        box4.visible = false
+        box5.visible = false
+        box6.visible = false
+        box7.visible = false
+        box8.visible = false
+        box9.visible = false
+        box10.visible = false
+        box11.visible = false
+        box12.visible = false
+        box13.visible = false
+        box14.visible = false
+        box15.visible = false
+        box16.visible = false
 
-    fill("orange");
-    text("Food Speed",615,120);
-    fill("yellow")
-    text("Reduces the food's speed, collecting",615,150);
-    text("food has never been easier!",615,180);
-    fill("white")
-    text("Price =       100 coins",700,120);
+        buy1.visible = false
+        buy2.visible = false
+        buy3.visible = false
+        buy4.visible = false
 
-    //Pt3
-    if(mousePressedOver(buy3) && coins>=100 && wSVal<7 && frameCount%3 === 0){
-        coins = coins-100; 
-        wSVal = wSVal+1
-    }
-    if(mousePressedOver(buy3) && coins<100 && wSVal<7){
-        text("Try purchasing this once you have more money",1125,250);
-    }
-    if(mousePressedOver(buy3) && wSVal === 7){
-        text("You have purchased the maximum you can!",1130,250);
-    }
+        CoinBuyStuff1.visible = false
+        CoinBuyStuff2.visible = false
+        CoinBuyStuff3.visible = false
+        CoinBuyStuff4.visible = false
+        
+        astpos.x = 10000;
+        astpos.y = 10000;
 
-    fill("blue");
-    text("Water Speed",1115,120);
-    fill("lightblue")
-    text("Reduces the water's speed, collecting",1115,150);
-    text("water has never been easier!",1115,180);
-    fill("white");
-    text("Price =       100 coins",1200,120);
+        
 
-    //Pt4
-    fill("yellow");
-    text("Double Score!",115,320);
-    fill("yellow")
-    text("Doubles your score, this has",115,350);
-    text("positive and negative results!",115,380);
-    fill("white")
-    text("Price =       1000 coins",200,320);
-
-    if(mousePressedOver(buy4) && coins>=1000 && maxCoinMulti === 0 && frameCount%3 === 0){
-        coins = coins-1000; 
-        maxCoinMulti = maxCoinMulti+1
-    }
-    if(mousePressedOver(buy4) && maxCoinMulti === 1){
-        text("You have purchased the maximum you can",130,450);
-    }
-
-
-    //go back to gameState 0
-    if(mousePressedOver(goBack) && gameState === 3){
-        gameState = 0
+        //go back go page 1
+        if(mousePressedOver(goBack) && frameCount%3 === 0){
+            shopPage = 1
+        }
     }
 }
 
