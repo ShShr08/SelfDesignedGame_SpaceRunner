@@ -41,6 +41,8 @@ var goBack,goBackImage,goNextPage,goNextPageImage;
 var halp,helpImage;
 var halpval = 0;
 var box1,box2,box3,box4,box5,box6,box7,box8,box9,box10,box11,box12,box13,box14,box15,box16;
+var boxx1,boxx2,boxx3,boxx4,boxx5,boxx6,boxx7,boxx8,boxx9,boxx10,boxx11,boxx12;
+var addGemConvert,removeGemConvert;
 var CoinBuyStuff1,CoinBuyStuff2,CoinBuyStuff3,CoinBuyStuff4;
 var buy1,buy2,buy3,buy4;
 var boss,bossImage,bossBackground,transferToBoss;
@@ -305,7 +307,16 @@ function setup(){
     shopPage2Sprite.scale = 1.5;
     pileOfGems = createSprite(1100,650,150,200);
     pileOfGems.addImage(pileOfGemsImage);
-    pileOfGems.scale = 1.2
+    pileOfGems.scale = 1.2;
+
+    boxx1 = createSprite(1250,282,300,10);
+    boxx1.shapeColor = "gold";
+    boxx2 = createSprite(1400,187,10,200);
+    boxx2.shapeColor = "gold";
+    boxx3 = createSprite(1100,430,10,200);
+    boxx3.shapeColor = "gold";
+    boxx4 = createSprite(1250,335,300,10);
+    boxx4.shapeColor = "gold";
 
     lG = new Group();
     foodGroup = new Group();
@@ -329,6 +340,11 @@ function draw(){
         dailyQuestDecoration2.visible = false
         dailyQuestDecoration3.visible = false
         dailyQuestDecoration4.visible = false
+        boxx1.visible = false
+        boxx2.visible = false
+        boxx3.visible = false
+        boxx4.visible = false
+        gem.visible = true
         box3.visible = false
         box4.visible = false
         box5.visible = false
@@ -377,7 +393,7 @@ function draw(){
         ahB.x = 365;
         ahB.y = 483;
         ahB2.x = 395;
-        ahB2.x = 545;
+        ahB2.y = 545;
         ahB3.x = 368;
         ahB3.y = 631;
         ahB4.x = 290;
@@ -537,6 +553,7 @@ function draw(){
         questBox3.visible = false
         questBox4.visible = false
         dailyQuestBox1.visible = false
+        gem.visible = false
         collectQReward.visible = false
         dailyQuestBox2.visible = false
         dailyQuestBox3.visible = false
@@ -795,6 +812,13 @@ function draw(){
             text("Water "+wSVal,450,600);
         }
         if(shopPage === 2){
+            fill("yellow");
+            text("Exclusive Shop",1200,50);
+
+            //textSize(20)
+            fill("white");
+            text("Gems to coins converter",300,50);
+            text("Under development",310,100)
             shopPage2Sprite.visible = true
             pileOfGems.visible = true
         }
@@ -1432,7 +1456,6 @@ function draw(){
     if(mousePressedOver(rSt)){
         foodStock = foodStock+5;
         waterStock = waterStock+2;
-        console.log(hour());
     }
     if(foodStock>10){
         foodStock = 10
@@ -1452,7 +1475,7 @@ function draw(){
     randY = Math.round(random(1,3));
     drawSprites();
     ast.display();
-    console.log(foodPressedCount);
+    //console.log(foodPressedCount);
 }
 
 function spawnEnemy(){
@@ -1758,6 +1781,10 @@ function getSupplies(){
 
 function buyStuff(){
     if(shopPage === 1){
+        boxx1.visible = false
+        boxx2.visible = false
+        boxx3.visible = false
+        boxx4.visible = false
         box1.visible = true
         box2.visible = true
         box3.visible = true
@@ -1880,6 +1907,10 @@ function buyStuff(){
         }
     }
     else if(shopPage === 2){
+        boxx1.visible = true
+        boxx2.visible = true
+        boxx3.visible = true
+        boxx4.visible = true
         box1.visible = false
         box2.visible = false
         box3.visible = false
@@ -1910,8 +1941,6 @@ function buyStuff(){
         astpos.x = 10000;
         astpos.y = 10000;
 
-        
-
         //go back go page 1
         if(mousePressedOver(goBack) && frameCount%3 === 0){
             shopPage = 1
@@ -1921,7 +1950,7 @@ function buyStuff(){
 
 function youreDead(){
     if(rand === 0){
-        rand = Math.round(random(1,3));
+        rand = 3 //Math.round(random(1,3));
     }
     if(rand === 1){
         if(score%1000 === 0){
@@ -2023,10 +2052,10 @@ function youreDead(){
             eM4.lifetime = 60;
         }
         if(score%1550 === 0){
-            dR = createSprite(768,361,1536,5);
+            dR = createSprite(768,361,5,1536);
             dR.shapeColor = "red";
             dR.lifetime = 100;
-            dR2 = createSprite(361,768,1536,5);
+            dR2 = createSprite(768,361,1536,5);
             dR2.shapeColor = "red";
             dR2.lifetime = 100;
             dRG.add(dR);
@@ -2053,7 +2082,7 @@ function deniedQuestFunction(){
         deniedQuestCooldownMinutes = 0
     }
     if(deniedQuestCooldown>=60){
-        deniedQuestCooldownMinutes = 1
+        deniedQuestCooldownMinutes = 1;
     }
     if(deniedQuestCooldownSeconds<=-1){
         deniedQuestCooldownSeconds = deniedQuestCooldownSeconds+60;
