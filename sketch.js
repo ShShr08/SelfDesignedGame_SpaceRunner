@@ -41,7 +41,8 @@ var goBack,goBackImage,goNextPage,goNextPageImage;
 var halp,helpImage;
 var halpval = 0;
 var box1,box2,box3,box4,box5,box6,box7,box8,box9,box10,box11,box12,box13,box14,box15,box16;
-var boxx1,boxx2,boxx3,boxx4,boxx5,boxx6,boxx7,boxx8,boxx9,boxx10,boxx11,boxx12;
+var boxx1,boxx2,boxx3,boxx4,boxx5,boxx6,boxx7,boxx8;
+var buyy1,buyy2,buyy3,buyy4,gemShow1,gemShow2,gemShow3,gemShow4;
 var addGemConvert,removeGemConvert;
 var CoinBuyStuff1,CoinBuyStuff2,CoinBuyStuff3,CoinBuyStuff4;
 var buy1,buy2,buy3,buy4;
@@ -172,7 +173,7 @@ function setup(){
     coin.scale = 0.1;
     gem = createSprite(1450,70,5,5);
     gem.addImage(gemImage);
-    gem.scale = 0.06;
+    gem.scale = 0.05;
 
     box1 = createSprite(100,150,10,126);
     box1.shapeColor = "white";
@@ -318,6 +319,28 @@ function setup(){
     boxx4 = createSprite(1250,335,300,10);
     boxx4.shapeColor = "gold";
 
+    buyy1 = createSprite(1384,182,23,190);
+    buyy1.shapeColor = "green";
+    buyy2 = createSprite(1116,436,23,190);
+    buyy2.shapeColor = "green";
+
+    gemShow1 = createSprite(9000,70,5,5);
+    gemShow1.addImage(gemImage);
+    gemShow1.scale = 0.05;
+
+    gemShow2 = createSprite(9000,70,5,5);
+    gemShow2.addImage(gemImage);
+    gemShow2.scale = 0.05;
+
+    gemShow3 = createSprite(9000,70,5,5);
+    gemShow3.addImage(gemImage);
+    gemShow3.scale = 0.05;
+
+    gemShow4 = createSprite(9000,70,5,5);
+    gemShow4.addImage(gemImage);
+    gemShow4.scale = 0.05;
+
+
     lG = new Group();
     foodGroup = new Group();
     waterGroup = new Group();
@@ -359,6 +382,14 @@ function draw(){
         box14.visible = false
         box15.visible = false
         box16.visible = false
+        buyy1.visible = false
+        buyy2.visible = false
+        //buyy3.visible = false
+        //buyy4.visible = false
+        gemShow1.visible = false
+        gemShow2.visible = false
+        gemShow3.visible = false
+        gemShow4.visible = false
         QuestButton.visible = true
         resetQuest.visible = false
         resetDailyQuest.visible = false
@@ -813,7 +844,7 @@ function draw(){
         }
         if(shopPage === 2){
             fill("yellow");
-            text("Exclusive Shop",1200,50);
+            text("Exclusive Shop",1050,50);
 
             //textSize(20)
             fill("white");
@@ -1801,7 +1832,14 @@ function buyStuff(){
         box14.visible = true
         box15.visible = true
         box16.visible = true
-
+        buyy1.visible = false
+        buyy2.visible = false
+        //buyy3.visible = false
+        //buyy4.visible = false
+        gemShow1.visible = false
+        gemShow2.visible = false
+        gemShow3.visible = false
+        gemShow4.visible = false
         buy1.visible = true
         buy2.visible = true
         buy3.visible = true
@@ -1927,12 +1965,18 @@ function buyStuff(){
         box14.visible = false
         box15.visible = false
         box16.visible = false
-
+        buyy1.visible = true
+        buyy2.visible = true
+        //visible = true
+        //buyy4.visible = true
+        gemShow1.visible = true
+        gemShow2.visible = true
+        gemShow3.visible = true
+        gemShow4.visible = true
         buy1.visible = false
         buy2.visible = false
         buy3.visible = false
         buy4.visible = false
-
         CoinBuyStuff1.visible = false
         CoinBuyStuff2.visible = false
         CoinBuyStuff3.visible = false
