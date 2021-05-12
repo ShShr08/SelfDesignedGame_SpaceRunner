@@ -43,7 +43,7 @@ var halpval = 0;
 var box1,box2,box3,box4,box5,box6,box7,box8,box9,box10,box11,box12,box13,box14,box15,box16;
 var boxx1,boxx2,boxx3,boxx4,boxx5,boxx6,boxx7,boxx8;
 var buyy1,buyy2,buyy3,buyy4,gemShow1,gemShow2,gemShow3,gemShow4;
-var addGemConvert,removeGemConvert;
+var addGemConvert,removeGemConvert,convertBox1,convertBox2,convertBox3,convertBox4,acceptConvert,inputConvert = 0,resultConvert = 0;
 var CoinBuyStuff1,CoinBuyStuff2,CoinBuyStuff3,CoinBuyStuff4;
 var buy1,buy2,buy3,buy4;
 var boss,bossImage,bossBackground,transferToBoss;
@@ -327,19 +327,31 @@ function setup(){
     gemShow1 = createSprite(9000,70,5,5);
     gemShow1.addImage(gemImage);
     gemShow1.scale = 0.05;
-
     gemShow2 = createSprite(9000,70,5,5);
     gemShow2.addImage(gemImage);
     gemShow2.scale = 0.05;
-
     gemShow3 = createSprite(9000,70,5,5);
     gemShow3.addImage(gemImage);
     gemShow3.scale = 0.05;
-
     gemShow4 = createSprite(9000,70,5,5);
     gemShow4.addImage(gemImage);
     gemShow4.scale = 0.05;
 
+    addGemConvert = createSprite(317,220,55,25);
+    addGemConvert.shapeColor = "lightgreen";
+    removeGemConvert = createSprite(418,220,55,25);
+    removeGemConvert.shapeColor = "red";
+    acceptConvert = createSprite(370,300,55,25);
+    acceptConvert.shapeColor = "yellow";
+
+    convertBox1 = createSprite(365,180,300,10);
+    convertBox1.shapeColor = "white";
+    convertBox2 = createSprite(220,250,10,150);
+    convertBox2.shapeColor = "white";
+    convertBox3 = createSprite(365,330,300,10);
+    convertBox3.shapeColor = "white";
+    convertBox4 = createSprite(510,250,10,150);
+    convertBox4.shapeColor = "white";
 
     lG = new Group();
     foodGroup = new Group();
@@ -363,6 +375,13 @@ function draw(){
         dailyQuestDecoration2.visible = false
         dailyQuestDecoration3.visible = false
         dailyQuestDecoration4.visible = false
+        addGemConvert.visible = false
+        convertBox1.visible = false
+        convertBox2.visible = false
+        convertBox3.visible = false
+        convertBox4.visible = false
+        removeGemConvert.visible = false
+        acceptConvert.visible = false
         boxx1.visible = false
         boxx2.visible = false
         boxx3.visible = false
@@ -830,28 +849,50 @@ function draw(){
         denyQuest.visible = false
         denyDailyQuest.visible = false
         
+        
         fill("white")
         text(" "+coins,1460,40);
         text("  "+gems,1460,75);
 
         if(shopPage === 1){
+            
             fill("yellow");
             text("Upgrades = ",450,450);
             fill("white");
             text("Lazer "+lSVal,450,500);
             text("Food "+fSVal,450,550);
             text("Water "+wSVal,450,600);
+            addGemConvert.visible = false
+            acceptConvert.visible = false
+            convertBox1.visible = false
+            convertBox2.visible = false
+            convertBox3.visible = false
+            convertBox4.visible = false
+            removeGemConvert.visible = false
         }
         if(shopPage === 2){
             fill("yellow");
             text("Exclusive Shop",1050,50);
 
+            fill("green");
+            text("Add gems",290,200);
+            fill("red");
+            text("Remove gems",380,200);
+            fill("purple")
+            text("Output, You get "+resultConvert,)
             //textSize(20)
             fill("white");
-            text("Gems to coins converter",300,50);
-            text("Under development",310,100)
+            text("Gems to coins converter",300,150);
+            text(inputConvert+" gems",350,250)
             shopPage2Sprite.visible = true
+            convertBox1.visible = true
+            convertBox2.visible = true
+            convertBox3.visible = true
+            convertBox4.visible = true
             pileOfGems.visible = true
+            addGemConvert.visible = true
+            acceptConvert.visible = true
+            removeGemConvert.visible = true
         }
 
         coin.visible = true
@@ -1944,7 +1985,7 @@ function buyStuff(){
             gameState = 0
         }
     }
-    else if(shopPage === 2){
+    if(shopPage === 2){
         boxx1.visible = true
         boxx2.visible = true
         boxx3.visible = true
@@ -1984,6 +2025,12 @@ function buyStuff(){
         
         astpos.x = 10000;
         astpos.y = 10000;
+
+        if(mousePressedOver(addGemConvert) && gems>=1 && frameCount%3 === 0){
+            gems = gems-1
+            inputConvert = inputConvert+1
+        }
+        
 
         //go back go page 1
         if(mousePressedOver(goBack) && frameCount%3 === 0){
